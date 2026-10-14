@@ -16,6 +16,7 @@ build/
 .cache/
 
 # Backups exportados do app (contêm dados da empresa)
+controladoria_backup*.json
 controladoria-backup*.json
 backup*.json
 
