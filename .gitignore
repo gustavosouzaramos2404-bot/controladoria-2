@@ -1,0 +1,29 @@
+# Segredos e variáveis de ambiente (nunca versionar)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+supabase/.env
+supabase/functions/.env
+supabase/.temp/
+supabase/.branches/
+
+# Dependências e build
+node_modules/
+dist/
+build/
+.cache/
+
+# Backups exportados do app (contêm dados da empresa)
+controladoria-backup*.json
+backup*.json
+
+# Ferramentas locais e sistema
+.claude/
+.vscode/
+.idea/
+*.log
+Thumbs.db
+desktop.ini
+.DS_Store

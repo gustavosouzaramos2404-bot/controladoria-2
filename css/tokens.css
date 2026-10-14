@@ -1,0 +1,89 @@
+/* ==========================================================================
+   css/tokens.css
+   Tokens de design: cores nomeadas, tipografia (fontes nativas do sistema,
+   pois o sistema funciona offline) e espaçamentos. Todas as demais folhas
+   de estilo usam somente estas variáveis.
+   Paleta principal:
+     Tinta     #1B2430  texto e Central de desvios
+     Papel     #F5F3EE  fundo da aplicação
+     Petróleo  #1D5C68  ações e navegação
+     Verde     #2E7D4F  dentro da meta
+     Âmbar     #9A5B00  atenção
+     Vermelho  #B42318  fora da meta / crítico
+   ========================================================================== */
+:root {
+  /* Cores base */
+  --tinta: #1B2430;
+  --tinta-2: #46505C;
+  --tinta-3: #5F6873;
+  --papel: #F5F3EE;
+  --superficie: #FFFFFF;
+  --superficie-2: #FAF8F4;
+  --linha: #DCD7CC;
+  --linha-forte: #B5AD9D;
+
+  /* Ação (petróleo) */
+  --acento: #1D5C68;
+  --acento-escuro: #123F48;
+  --acento-claro: #E2EDEF;
+
+  /* Status: sempre acompanhados de ícone e texto */
+  --dentro: #2E7D4F;
+  --dentro-fundo: #E5F1E9;
+  --atencao: #9A5B00;
+  --atencao-fundo: #FBEFD9;
+  --fora: #B42318;
+  --fora-fundo: #FBE8E5;
+  --sem-dados: #5F6873;
+  --sem-dados-fundo: #ECEAE5;
+
+  /* Central de desvios (faixa escura, o elemento de destaque) */
+  --central: #15202B;
+  --central-2: #1F2D3B;
+  --central-linha: #33475A;
+  --central-texto: #F4F2ED;
+  --central-suave: #B9C4CE;
+  --central-critico: #FF8A7A;
+  --central-atencao: #F2B65A;
+
+  /* Gráficos */
+  --graf-1: #1D5C68;
+  --graf-2: #C0762A;
+  --graf-3: #7A6A9E;
+  --graf-4: #8A9A5B;
+  --graf-grade: #E6E1D6;
+  --graf-eixo: #5F6873;
+  --graf-positivo: #2E7D4F;
+  --graf-negativo: #B42318;
+  --graf-total: #1B2430;
+
+  /* Tipografia (pilha nativa, sem download) */
+  --fonte: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Roboto, "Noto Sans", Arial, sans-serif;
+  --fonte-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+  --fs-0: 0.8125rem;
+  --fs-1: 0.875rem;
+  --fs-2: 1rem;
+  --fs-3: 1.125rem;
+  --fs-4: 1.375rem;
+  --fs-5: 1.75rem;
+  --peso-normal: 400;
+  --peso-medio: 600;
+  --peso-forte: 700;
+
+  /* Espaçamentos */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 24px;
+  --esp-6: 32px;
+  --esp-7: 48px;
+
+  /* Formas e camadas */
+  --raio: 4px;
+  --raio-2: 8px;
+  --sombra-modal: 0 16px 48px rgba(21, 32, 43, 0.28);
+  --largura-nav: 236px;
+  --largura-conteudo: 1480px;
+  --duracao: 160ms;
+}

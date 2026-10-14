@@ -1,0 +1,89 @@
+<!doctype html>
+<!--
+  Controladoria — sistema web de controladoria para indústria de alimentos B2G.
+  Abre com duplo clique (protocolo file://), funciona offline e sem dependências.
+  Os scripts são clássicos (sem ES modules) e carregados em ordem:
+  núcleo → cálculos → persistência → interface → telas → app.
+  O sistema começa vazio: todos os dados são preenchidos pelo usuário.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Controladoria: estamos indo bem? Indicadores, desvios e planos de ação.">
+  <title>Controladoria</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="app">
+    <!-- Barra superior: visível só em telas pequenas, com o botão do menu -->
+    <header class="topo">
+      <button type="button" class="botao-menu" aria-controls="navegacao" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        Menu
+      </button>
+      <span class="marca">Controladoria</span>
+    </header>
+
+    <!-- Navegação lateral (montada por app.js) -->
+    <nav id="navegacao" class="navegacao" aria-label="Seções do sistema"></nav>
+
+    <!-- Conteúdo da tela atual -->
+    <main id="conteudo" class="conteudo" tabindex="-1">
+      <div id="tela" class="tela">
+        <noscript><p>O Controladoria precisa de JavaScript habilitado para funcionar.</p></noscript>
+      </div>
+    </main>
+  </div>
+
+  <!-- Avisos rápidos (toast) lidos por leitores de tela -->
+  <div id="avisos" class="avisos" aria-live="polite"></div>
+
+  <!-- Núcleo -->
+  <script src="js/core/namespace.js"></script>
+  <script src="js/core/events.js"></script>
+  <script src="js/core/format.js"></script>
+  <script src="js/core/validate.js"></script>
+  <script src="js/core/schema.js"></script>
+  <!-- Cálculos (funções puras) -->
+  <script src="js/calc/base.js"></script>
+  <script src="js/calc/custos.js"></script>
+  <script src="js/calc/estoque.js"></script>
+  <script src="js/calc/contratos.js"></script>
+  <script src="js/calc/capitalGiro.js"></script>
+  <script src="js/calc/financeiros.js"></script>
+  <script src="js/calc/orcamento.js"></script>
+  <script src="js/calc/contexto.js"></script>
+  <script src="js/calc/indicadores.js"></script>
+  <script src="js/calc/alertas.js"></script>
+  <!-- Persistência, log e roteamento -->
+  <script src="js/core/store.js"></script>
+  <script src="js/core/log.js"></script>
+  <script src="js/core/router.js"></script>
+  <!-- Interface -->
+  <script src="js/ui/dom.js"></script>
+  <script src="js/ui/toast.js"></script>
+  <script src="js/ui/modal.js"></script>
+  <script src="js/ui/empty-states.js"></script>
+  <script src="js/ui/tables.js"></script>
+  <script src="js/ui/forms.js"></script>
+  <script src="js/ui/charts.js"></script>
+  <!-- Telas -->
+  <script src="js/modules/comum.js"></script>
+  <script src="js/modules/painel.js"></script>
+  <script src="js/modules/cadastros.js"></script>
+  <script src="js/modules/custos.js"></script>
+  <script src="js/modules/estoque.js"></script>
+  <script src="js/modules/contratos.js"></script>
+  <script src="js/modules/orcamento.js"></script>
+  <script src="js/modules/configuracoes.js"></script>
+  <!-- Inicialização -->
+  <script src="js/app.js"></script>
+</body>
+</html>

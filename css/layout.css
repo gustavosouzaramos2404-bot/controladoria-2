@@ -1,0 +1,238 @@
+/* ==========================================================================
+   css/layout.css
+   Estrutura da aplicação: navegação lateral (vira menu recolhível em telas
+   pequenas), área de conteúdo, cabeçalho de tela, blocos e grades
+   responsivas (360 px a 1920 px).
+   ========================================================================== */
+.app {
+  display: grid;
+  grid-template-columns: var(--largura-nav) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* Barra superior: só aparece em telas pequenas. */
+.topo {
+  display: none;
+}
+
+/* ----------------------------- Navegação ----------------------------- */
+.navegacao {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--superficie);
+  border-right: 1px solid var(--linha);
+  display: flex;
+  flex-direction: column;
+}
+.navegacao-marca {
+  padding: var(--esp-5) var(--esp-4) var(--esp-4);
+  border-bottom: 1px solid var(--linha);
+}
+.navegacao-marca strong {
+  display: block;
+  font-size: var(--fs-3);
+  letter-spacing: -0.01em;
+}
+.navegacao-marca span {
+  display: block;
+  font-size: var(--fs-0);
+  color: var(--tinta-2);
+}
+.navegacao-lista {
+  list-style: none;
+  margin: 0;
+  padding: var(--esp-2) 0;
+  flex: 1;
+}
+.navegacao-link {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: 9px var(--esp-4);
+  color: var(--tinta);
+  text-decoration: none;
+  font-size: var(--fs-1);
+  border-left: 3px solid transparent;
+}
+.navegacao-link svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--tinta-2);
+}
+.navegacao-link:hover {
+  background: var(--superficie-2);
+  color: var(--acento-escuro);
+}
+.navegacao-link[aria-current="page"] {
+  background: var(--acento-claro);
+  border-left-color: var(--acento);
+  color: var(--acento-escuro);
+  font-weight: var(--peso-medio);
+}
+.navegacao-link[aria-current="page"] svg { color: var(--acento); }
+.navegacao-contador {
+  margin-left: auto;
+  min-width: 22px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background: var(--fora);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: var(--peso-forte);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.navegacao-rodape {
+  padding: var(--esp-3) var(--esp-4);
+  border-top: 1px solid var(--linha);
+  font-size: var(--fs-0);
+  color: var(--tinta-2);
+}
+
+/* ------------------------------ Conteúdo ------------------------------ */
+.conteudo {
+  min-width: 0;
+  outline: none;
+}
+.tela {
+  max-width: var(--largura-conteudo);
+  margin: 0 auto;
+  padding: var(--esp-5) var(--esp-6) var(--esp-7);
+}
+
+/* Cabeçalho de cada tela */
+.cabecalho-tela {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--esp-3) var(--esp-5);
+  margin-bottom: var(--esp-5);
+}
+.cabecalho-tela h1 { margin: 0; }
+.cabecalho-tela h1:focus { outline: none; }
+.cabecalho-tela .subtitulo {
+  margin: var(--esp-1) 0 0;
+  color: var(--tinta-2);
+  max-width: 72ch;
+}
+.acoes-tela {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2);
+}
+.migalha {
+  font-size: var(--fs-1);
+  margin-bottom: var(--esp-2);
+}
+
+/* Blocos de conteúdo: borda fina, sem sombra decorativa */
+.bloco {
+  background: var(--superficie);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  padding: var(--esp-5);
+  margin-bottom: var(--esp-5);
+  min-width: 0;
+}
+.bloco > :last-child { margin-bottom: 0; }
+.bloco-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-2) var(--esp-4);
+  margin-bottom: var(--esp-4);
+}
+.bloco-cabecalho h2,
+.bloco-cabecalho h3 {
+  margin: 0;
+  font-size: var(--fs-3);
+}
+.bloco-cabecalho p {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--fs-1);
+}
+.bloco-plano {
+  margin-bottom: var(--esp-5);
+}
+
+/* Grades responsivas */
+.grade-2,
+.grade-3,
+.grade-4 {
+  display: grid;
+  gap: var(--esp-5);
+  margin-bottom: var(--esp-5);
+}
+.grade-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grade-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grade-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grade-2 > .bloco,
+.grade-3 > .bloco,
+.grade-4 > .bloco { margin-bottom: 0; }
+
+@media (max-width: 1200px) {
+  .grade-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grade-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1100px) {
+  .grade-2 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ------------------------ Telas pequenas (menu) ------------------------ */
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .topo {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-3);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: var(--esp-2) var(--esp-4);
+    background: var(--superficie);
+    border-bottom: 1px solid var(--linha);
+  }
+  .topo .marca {
+    font-weight: var(--peso-forte);
+  }
+  .navegacao {
+    position: fixed;
+    z-index: 40;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(84vw, 300px);
+    height: auto;
+    transform: translateX(-102%);
+    transition: transform var(--duracao) ease-out;
+    box-shadow: var(--sombra-modal);
+  }
+  .navegacao.aberta {
+    transform: translateX(0);
+  }
+  .fundo-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgba(21, 32, 43, 0.45);
+  }
+  .tela {
+    padding: var(--esp-4) var(--esp-4) var(--esp-6);
+  }
+  h1 { font-size: var(--fs-4); }
+}
+
+@media (max-width: 640px) {
+  .grade-4,
+  .grade-3 { grid-template-columns: minmax(0, 1fr); }
+  .bloco { padding: var(--esp-4); }
+}

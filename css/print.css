@@ -1,0 +1,68 @@
+/* ==========================================================================
+   css/print.css
+   Estilos de impressão (relatório mensal da controladoria): remove a
+   navegação e os botões, usa preto sobre branco,
+   evita quebrar tabelas e blocos no meio e força quebra entre seções.
+   Carregado com media="print" no index.html.
+   ========================================================================== */
+@page {
+  size: A4;
+  margin: 14mm 12mm 16mm;
+}
+
+html, body {
+  background: #fff !important;
+  color: #000 !important;
+  font-size: 10.5pt;
+}
+
+.topo,
+.navegacao,
+.fundo-menu,
+.pular,
+.avisos,
+.acoes-tela,
+.filtros,
+.paginacao,
+.tabela-barra,
+.nao-imprimir,
+button,
+.botao,
+dialog {
+  display: none !important;
+}
+
+.app { display: block; }
+.tela { max-width: none; padding: 0; }
+
+.bloco,
+.tabela-rolagem,
+.resumo {
+  border-color: #999 !important;
+  background: #fff !important;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.tabela-rolagem { overflow: visible; }
+.tabela th { background: #eee !important; color: #000 !important; }
+.tabela tr { break-inside: avoid; page-break-inside: avoid; }
+.tabela thead { display: table-header-group; }
+
+.central {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #000;
+}
+.central *,
+.central-cabecalho h2,
+.desvio-titulo,
+.desvio-evidencias strong { color: #000 !important; }
+.desvio { background: #fff !important; border: 1px solid #999; }
+
+.quebra-pagina {
+  break-before: page;
+  page-break-before: always;
+}
+.relatorio-cabecalho { border-bottom: 2px solid #000; margin-bottom: 8mm; }
+a { color: #000; text-decoration: none; }
+.grafico svg { max-height: 70mm; }

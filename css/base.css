@@ -1,0 +1,125 @@
+/* ==========================================================================
+   css/base.css
+   Estilos de base: normalização, tipografia, links, foco visível no
+   teclado, números tabulares e respeito a prefers-reduced-motion.
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte);
+  font-size: var(--fs-2);
+  line-height: 1.5;
+  color: var(--tinta);
+  background: var(--papel);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 var(--esp-3);
+  line-height: 1.25;
+  font-weight: var(--peso-forte);
+  color: var(--tinta);
+}
+h1 { font-size: var(--fs-5); letter-spacing: -0.01em; }
+h2 { font-size: var(--fs-4); }
+h3 { font-size: var(--fs-3); }
+h4 { font-size: var(--fs-2); }
+
+p { margin: 0 0 var(--esp-3); }
+
+a {
+  color: var(--acento);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+a:hover { color: var(--acento-escuro); }
+
+small { font-size: var(--fs-0); }
+
+code, kbd {
+  font-family: var(--fonte-mono);
+  font-size: 0.92em;
+}
+
+img, svg { max-width: 100%; }
+
+/* Ícones embutidos: tamanho proporcional ao texto (botões e etiquetas ajustam). */
+.icone {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+  vertical-align: -0.18em;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Foco visível em todos os elementos interativos (teclado). */
+:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Números alinhados (tabulares) */
+.num,
+td.num,
+th.num,
+.valor {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Oculta visualmente, mas mantém para leitores de tela. */
+.visualmente-oculto {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Link "pular para o conteúdo" aparece só ao receber foco. */
+.pular {
+  position: absolute;
+  left: var(--esp-2);
+  top: -60px;
+  z-index: 100;
+  padding: var(--esp-2) var(--esp-4);
+  background: var(--tinta);
+  color: #fff;
+  border-radius: var(--raio);
+}
+.pular:focus { top: var(--esp-2); }
+
+.suave { color: var(--tinta-2); }
+.muito-suave { color: var(--tinta-3); }
+.forte { font-weight: var(--peso-forte); }
+.nowrap { white-space: nowrap; }
+
+/* Respeita quem prefere menos movimento. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

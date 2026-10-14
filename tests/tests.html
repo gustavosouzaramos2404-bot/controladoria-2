@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+  Testes no navegador: carrega os mesmos módulos puros do sistema e executa
+  tests/calc.test.js (os mesmos testes que rodam no Node). Não usa nem altera
+  os dados salvos do sistema.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testes de cálculo · Controladoria</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    /* Layout simples da página de testes */
+    body { padding: 24px; max-width: 980px; margin: 0 auto; }
+    .resultado { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--linha); font-size: var(--fs-1); }
+    .resultado pre { margin: 4px 0 0; white-space: pre-wrap; color: var(--fora); font-size: var(--fs-0); }
+  </style>
+</head>
+<body>
+  <h1>Testes de cálculo</h1>
+  <p id="resumo" class="texto-leitura" role="status">Executando…</p>
+  <div id="resultados"></div>
+
+  <script src="../js/core/namespace.js"></script>
+  <script src="../js/core/events.js"></script>
+  <script src="../js/core/format.js"></script>
+  <script src="../js/core/validate.js"></script>
+  <script src="../js/core/schema.js"></script>
+  <script src="../js/calc/base.js"></script>
+  <script src="../js/calc/custos.js"></script>
+  <script src="../js/calc/estoque.js"></script>
+  <script src="../js/calc/contratos.js"></script>
+  <script src="../js/calc/capitalGiro.js"></script>
+  <script src="../js/calc/financeiros.js"></script>
+  <script src="../js/calc/orcamento.js"></script>
+  <script src="../js/calc/contexto.js"></script>
+  <script src="../js/calc/indicadores.js"></script>
+  <script src="../js/calc/alertas.js"></script>
+  <script src="../js/core/store.js"></script>
+  <script src="../js/ui/dom.js"></script>
+  <script src="calc.test.js"></script>
+  <script>
+    /* Mostra os resultados dos testes na página (ícone + texto, não só cor). */
+    (function () {
+      const { html, status } = window.Controladoria.ui;
+      const r = window.resultadosTestes || [];
+      const falhas = r.filter((x) => !x.ok).length;
+      document.getElementById('resumo').innerHTML = String(html`${status(falhas ? 'fora' : 'dentro', falhas ? `${falhas} falha(s)` : 'Todos passaram')} ${r.length - falhas} de ${r.length} testes passaram.`);
+      document.title = `${falhas ? '✗' : '✓'} ${r.length - falhas}/${r.length} · Testes · Controladoria`;
+      document.getElementById('resultados').innerHTML = String(html`${r.map((x) => html`
+        <div class="resultado">${status(x.ok ? 'dentro' : 'fora', x.ok ? 'Passou' : 'Falhou')}
+          <div>${x.nome}${x.ok ? '' : html`<pre>${x.erro}</pre>`}</div></div>`)}`);
+    })();
+  </script>
+</body>
+</html>
