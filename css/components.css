@@ -191,6 +191,8 @@
   font-weight: var(--peso-medio);
 }
 .campo input[type="text"],
+.campo input[type="email"],
+.campo input[type="password"],
 .campo input[type="date"],
 .campo input[type="search"],
 .campo select,
@@ -722,3 +724,36 @@ dialog.modal::backdrop { background: rgba(21, 32, 43, 0.55); }
 .espaco-acima { margin-top: var(--esp-4); }
 .sem-margem { margin: 0; }
 .alinhar-direita { text-align: right; }
+
+/* ------------------- Sincronização com o banco (modules/conexao.js) ------------------- */
+.sincronia {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px var(--esp-2);
+}
+.sincronia-ponto {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--sem-dados);
+}
+.sincronia-dentro .sincronia-ponto { background: var(--dentro); }
+.sincronia-acento .sincronia-ponto { background: var(--acento); }
+.sincronia-atencao .sincronia-ponto { background: var(--atencao); }
+.sincronia-fora .sincronia-ponto { background: var(--fora); }
+.botao-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--acento);
+  font: inherit;
+  font-weight: var(--peso-medio);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.botao-link:hover { color: var(--acento-escuro); }
+.formulario > .caixa-alerta { grid-column: 1 / -1; margin: 0; }
+.lista-opcoes { padding-left: var(--esp-5); font-size: var(--fs-1); }
+.lista-opcoes li + li { margin-top: var(--esp-2); }

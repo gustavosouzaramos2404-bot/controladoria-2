@@ -7,7 +7,11 @@
    - versão do esquema e migrações;
    - operações de cadastro (listar, obter, inserir, atualizar, remover);
    - exportar e substituir todos os dados (backup).
-   Toda alteração dispara o evento 'dados:alterados'.
+   Toda alteração dispara o evento 'dados:alterados'. Para a sincronização
+   com o banco (core/sincronizacao.js), cada registro alterado pelo usuário
+   dispara também 'registro:alterado' ({ colecao, id, acao }) e as trocas
+   completas (importar backup, apagar tudo) disparam 'dados:substituidos'.
+   Dados vindos do servidor entram por aplicarDoServidor(), sem esses avisos.
    ========================================================================== */
 (function (raiz) {
   'use strict';
@@ -194,6 +198,11 @@
     }
   }
 
+  /** Avisa a sincronização que um registro mudou por ação do usuário. */
+  function avisarRegistro(colecao, id, acao) {
+    NS.core.eventos.emit('registro:alterado', { colecao, id: id || '', acao });
+  }
+
   /** Cria um erro de validação com a lista de erros por campo. */
   function erroValidacao(erros) {
     const err = new Error('Há campos com erro: ' + erros.map((e) => `${e.campo} (${e.mensagem})`).join('; '));
@@ -257,6 +266,7 @@
       if (colecao === 'log' && estado.log.length > LIMITE_LOG) {
         estado.log.splice(0, estado.log.length - LIMITE_LOG);
       }
+      avisarRegistro(colecao, reg.id, 'salvar');
       salvar();
       return reg;
     },
@@ -275,6 +285,7 @@
         if (erros.length) throw erroValidacao(erros);
       }
       lista[idx] = novo;
+      avisarRegistro(colecao, id, 'salvar');
       salvar();
       return novo;
     },
@@ -283,7 +294,10 @@
     remover(colecao, id) {
       const antes = estado[colecao].length;
       estado[colecao] = estado[colecao].filter((r) => r.id !== id);
-      if (estado[colecao].length !== antes) salvar();
+      if (estado[colecao].length !== antes) {
+        avisarRegistro(colecao, id, 'remover');
+        salvar();
+      }
     },
 
     /** Dados da empresa (objeto único). */
@@ -295,6 +309,7 @@
       const erros = NS.core.schema.validarRegistro('empresa', novo);
       if (erros.length) throw erroValidacao(erros);
       estado.empresa = novo;
+      avisarRegistro('empresa', '', 'salvar');
       salvar();
       return novo;
     },
@@ -308,6 +323,7 @@
       const novo = Object.assign({}, atual, clonar(campos));
       if (campos.alertas) novo.alertas = Object.assign({}, atual.alertas, clonar(campos.alertas));
       estado.configuracoes = novo;
+      avisarRegistro('configuracoes', '', 'salvar');
       salvar();
       return novo;
     },
@@ -319,19 +335,65 @@
      */
     substituirTudo(dados) {
       estado = normalizar(migrar(clonar(dados)));
+      NS.core.eventos.emit('dados:substituidos', { origem: 'usuario' });
       salvar(true);
+    },
+
+    /**
+     * Aplica dados recebidos do banco (mesmo formato do backup).
+     * - completo: a lista do servidor passa a ser a lista local;
+     * - senão: só inclui/atualiza os registros recebidos.
+     * "preservar" (Set de "colecao|id") lista registros com alteração local
+     * ainda não enviada: esses ficam com a versão local.
+     * O nome do usuário (configuracoes.usuario) é sempre o local.
+     */
+    aplicarDoServidor(remoto, { completo = false, preservar = new Set() } = {}) {
+      const manter = (col, id) => preservar.has(`${col}|${id || ''}`);
+      for (const col of NS.core.schema.COLECOES) {
+        const lista = remoto[col];
+        if (!Array.isArray(lista)) continue;
+        if (completo) {
+          const locais = new Map(estado[col].map((r) => [r.id, r]));
+          const novo = lista.map((r) => (manter(col, r.id) && locais.has(r.id) ? locais.get(r.id) : clonar(r)));
+          const ids = new Set(novo.map((r) => r.id));
+          for (const r of estado[col]) if (manter(col, r.id) && !ids.has(r.id)) novo.push(r);
+          estado[col] = novo;
+        } else {
+          for (const r of lista) {
+            if (manter(col, r.id)) continue;
+            const idx = estado[col].findIndex((x) => x.id === r.id);
+            if (idx >= 0) estado[col][idx] = clonar(r); else estado[col].push(clonar(r));
+          }
+        }
+      }
+      for (const ex of remoto.exclusoes || []) {
+        if (!Array.isArray(estado[ex.colecao]) || manter(ex.colecao, ex.id)) continue;
+        estado[ex.colecao] = estado[ex.colecao].filter((r) => r.id !== ex.id);
+      }
+      if (remoto.empresa && !manter('empresa', '')) estado.empresa = clonar(remoto.empresa);
+      if (remoto.configuracoes && !manter('configuracoes', '')) {
+        estado.configuracoes = Object.assign(clonar(remoto.configuracoes), { usuario: estado.configuracoes.usuario });
+      }
+      if (estado.log.length > LIMITE_LOG) estado.log.splice(0, estado.log.length - LIMITE_LOG);
+      estado = normalizar(estado);
+      salvar();
     },
 
     /** Cópia completa para exportação em JSON. */
     exportar() { return clonar(estado); },
 
-    /** Volta ao estado vazio. "manter" lista partes a preservar (ex.: indicadores). */
-    apagarTudo(manter = []) {
+    /**
+     * Volta ao estado vazio. "manter" lista partes a preservar (ex.: indicadores).
+     * origem 'usuario' (padrão) também apaga no banco, se conectado;
+     * origem 'sistema' (primeiro uso, recuperação) mexe só neste navegador.
+     */
+    apagarTudo(manter = [], { origem = 'usuario' } = {}) {
       const novo = estadoVazio();
       for (const parte of manter) {
         if (estado && estado[parte] !== undefined) novo[parte] = clonar(estado[parte]);
       }
       estado = normalizar(novo);
+      NS.core.eventos.emit('dados:substituidos', { origem });
       salvar();
     }
   };

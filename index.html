@@ -1,7 +1,8 @@
 <!doctype html>
 <!--
   Controladoria — sistema web de controladoria para indústria de alimentos B2G.
-  Abre com duplo clique (protocolo file://), funciona offline e sem dependências.
+  Sirva por http (node ferramentas/servidor.js) para usar o banco de dados;
+  funciona offline e sem dependências externas (os dados ficam em cache no navegador).
   Os scripts são clássicos (sem ES modules) e carregados em ordem:
   núcleo → cálculos → persistência → interface → telas → app.
   O sistema começa vazio: todos os dados são preenchidos pelo usuário.
@@ -51,6 +52,7 @@
   <script src="js/core/format.js"></script>
   <script src="js/core/validate.js"></script>
   <script src="js/core/schema.js"></script>
+  <script src="js/core/config.js"></script>
   <!-- Cálculos (funções puras) -->
   <script src="js/calc/base.js"></script>
   <script src="js/calc/custos.js"></script>
@@ -66,6 +68,9 @@
   <script src="js/core/store.js"></script>
   <script src="js/core/log.js"></script>
   <script src="js/core/router.js"></script>
+  <!-- Banco de dados (Supabase) e sincronização -->
+  <script src="js/core/supabase.js"></script>
+  <script src="js/core/sincronizacao.js"></script>
   <!-- Interface -->
   <script src="js/ui/dom.js"></script>
   <script src="js/ui/toast.js"></script>
@@ -82,6 +87,7 @@
   <script src="js/modules/estoque.js"></script>
   <script src="js/modules/contratos.js"></script>
   <script src="js/modules/orcamento.js"></script>
+  <script src="js/modules/conexao.js"></script>
   <script src="js/modules/configuracoes.js"></script>
   <!-- Inicialização -->
   <script src="js/app.js"></script>

@@ -5,7 +5,8 @@
      nenhum dado é inventado, tudo é preenchido pelo usuário);
    - monta a navegação lateral e o menu recolhível das telas pequenas;
    - registra as rotas de cada módulo e renderiza a tela atual;
-   - mantém em cache o contexto de cálculo (refeito só quando os dados mudam).
+   - mantém em cache o contexto de cálculo (refeito só quando os dados mudam);
+   - liga a sincronização com o banco (core/sincronizacao.js), se configurada.
    ========================================================================== */
 (function (raiz) {
   'use strict';
@@ -50,7 +51,7 @@
       <ul class="navegacao-lista">
         ${SECOES.map((s) => html`<li><a class="navegacao-link" href="#/${s.id}" data-secao="${s.id}">${icone(s.icone)}<span>${s.rotulo}</span></a></li>`)}
       </ul>
-      <div class="navegacao-rodape">Usuário: ${store.config().usuario || 'preencha em Configurações'}<br>Versão ${NS.versao} · dados neste navegador</div>`);
+      <div class="navegacao-rodape">Usuário: ${store.config().usuario || 'preencha em Configurações'}<br>Versão ${NS.versao}<div data-sincronia>${NS.modules.conexao.indicador()}</div></div>`);
   }
 
   /** Marca a seção atual e mostra o número de desvios críticos no Painel. */
@@ -149,7 +150,9 @@
         rotuloConfirmar: 'Começar do zero', perigo: true
       });
       if (!ok) return;
-      store.apagarTudo([]);
+      // Só neste navegador: o banco não é apagado; a próxima conexão baixa os dados de novo.
+      store.apagarTudo([], { origem: 'sistema' });
+      NS.core.sincronizacao.desvincular();
       location.reload();
     });
     tela.querySelector('[data-importar]').addEventListener('change', (ev) => {
@@ -184,7 +187,7 @@
     }
     if (carga.novo) {
       // Primeiro uso: estado vazio, com os indicadores estruturados e metas em branco.
-      store.apagarTudo([]);
+      store.apagarTudo([], { origem: 'sistema' });
     }
 
     for (const modulo of Object.values(NS.modules)) {
@@ -202,6 +205,8 @@
       NS.ui.avisar(`Algo deu errado: ${ev.message}`, 'erro');
     });
     router.iniciar();
+    NS.modules.conexao.iniciar();
+    NS.core.sincronizacao.iniciar({ novo: Boolean(carga.novo) });
   }
 
   NS.app = { SECOES, contexto, renderizar, formatar: F };

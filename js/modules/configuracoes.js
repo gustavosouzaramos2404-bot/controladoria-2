@@ -5,6 +5,8 @@
    - metas e tolerâncias de cada indicador (toda mudança vai para o log
      com justificativa);
    - limites dos alertas (seção 6);
+   - banco de dados: login, status da sincronização e envio dos dados deste
+     navegador (bloco montado por modules/conexao.js);
    - backup: exportar JSON, importar JSON (com validação de esquema antes de
      substituir) e apagar todos os dados (com confirmação digitada).
    Metas em branco aparecem como "a definir": nada é preenchido pelo sistema.
@@ -86,13 +88,24 @@
   }
 
   /**
+   * Com o banco conectado, substituir todos os dados vale para a equipe
+   * inteira: só administrador. Devolve true se pode seguir.
+   */
+  function podeSubstituirTudo() {
+    const st = NS.core.sincronizacao.estado();
+    if (!st.vinculado || st.papel === 'admin') return true;
+    NS.ui.avisar('Com o banco conectado, só um administrador pode importar backup ou apagar todos os dados.', 'erro');
+    return false;
+  }
+
+  /**
    * Lê um arquivo de backup, valida o esquema e só então pergunta se pode
    * substituir os dados atuais. Nada é alterado se houver erro.
    */
   function importarArquivo(arquivo, aoConcluir) {
     const store = NS.core.store;
     const { html } = NS.ui;
-    if (!arquivo) return;
+    if (!arquivo || !podeSubstituirTudo()) return;
     const leitor = new FileReader();
     leitor.onerror = () => NS.ui.avisar('Não foi possível ler o arquivo escolhido.', 'erro');
     leitor.onload = async () => {
@@ -150,10 +163,14 @@
     const store = NS.core.store;
     const config = store.config();
     const tamanhoKB = Math.round(JSON.stringify(store.dados()).length / 1024);
+    const conectado = Boolean(NS.core.sincronizacao.estado().vinculado);
     const avaliacoes = new Map(ctx.avaliacoes(ctx.competencia).map((a) => [a.indicador.id, a]));
 
     el.innerHTML = String(html`
       ${C.cabecalho({ titulo: 'Configurações', subtitulo: 'Metas, tolerâncias, limites dos alertas, backup e manutenção dos dados.' })}
+      <section class="bloco" id="banco"><div class="bloco-cabecalho"><h2>Banco de dados</h2>
+        <p>Os dados ficam neste navegador e, com login, são sincronizados com o banco da empresa (Supabase).</p></div>
+        <div data-slot="banco">${NS.modules.conexao.painelHtml()}</div></section>
       <section class="bloco"><div class="bloco-cabecalho"><h2>Preferências</h2></div><div data-slot="pref"></div></section>
       <section class="bloco">
         <div class="bloco-cabecalho"><h2>Metas e tolerâncias dos indicadores</h2>
@@ -164,7 +181,8 @@
         <p>Usados pela Central de desvios. A meta de perdas é a do indicador "Índice de perdas".</p></div><div data-slot="limites"></div></section>
       <section class="bloco">
         <div class="bloco-cabecalho"><h2>Backup e dados</h2>
-          <p>Os dados ficam só neste navegador (${F.numero(tamanhoKB)} KB usados de cerca de 5 MB). Faça backup com frequência.</p></div>
+          <p>Cópia local neste navegador: ${F.numero(tamanhoKB)} KB usados de cerca de 5 MB. Faça backup com frequência.</p>
+          ${conectado ? html`<p class="nota">Com o banco conectado, importar um backup ou apagar todos os dados também substitui os dados do banco para toda a equipe (somente administrador).</p>` : ''}</div>
         <div class="grade-2">
           <div>
             <h3>Backup</h3>
@@ -245,6 +263,7 @@
       if (acao === 'editar-meta') editarIndicador(alvo.dataset.id);
       else if (acao === 'exportar') exportarJSON();
       else if (acao === 'apagar-tudo') {
+        if (!podeSubstituirTudo()) return;
         const ok = await NS.ui.modal.confirmar({
           titulo: 'Apagar todos os dados',
           mensagem: 'Todos os dados deste navegador serão apagados definitivamente, inclusive metas, limites e log. Esta ação não pode ser desfeita.',
