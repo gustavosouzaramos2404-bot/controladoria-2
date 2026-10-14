@@ -314,7 +314,7 @@
   }
 
   NS.core.sincronizacao = {
-    iniciar, sincronizar, enviarTudo, usarDadosDoBanco, desvincular, descartarErros, tentarErrosDeNovo,
+    iniciar, sincronizar, enviarTudo, conferirMembro, usarDadosDoBanco, desvincular, descartarErros, tentarErrosDeNovo,
     status: () => status,
     fila: lerFila,
     estado: lerEstado,

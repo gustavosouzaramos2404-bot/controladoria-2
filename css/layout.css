@@ -236,3 +236,20 @@
   .grade-3 { grid-template-columns: minmax(0, 1fr); }
   .bloco { padding: var(--esp-4); }
 }
+
+/* ------------------- Tela de login (antes de acessar os dados) ------------------- */
+body.modo-login .navegacao,
+body.modo-login .topo { display: none; }
+body.modo-login .app { grid-template-columns: minmax(0, 1fr); }
+.login {
+  display: grid;
+  place-items: center;
+  min-height: 80vh;
+}
+.login-cartao {
+  width: 100%;
+  max-width: 420px;
+}
+.login-cartao h1 { margin: 0 0 var(--esp-1); outline: none; }
+.login-cartao .subtitulo { margin: 0 0 var(--esp-4); color: var(--tinta-2); }
+.login-cartao .nota { margin: var(--esp-4) 0 0; }

@@ -3,8 +3,9 @@
    Conexão com o banco de dados (Supabase), na interface:
    - indicador de sincronização no rodapé da navegação (sincronizado, sem
      conexão, alterações aguardando envio, erro) com atalho para entrar;
-   - janela de login (e-mail e senha; usuários são criados pelo
-     administrador no painel do Supabase);
+   - tela de login ANTES de acessar os dados (quando o banco está
+     configurado) e janela de login; usuários são criados pelo
+     administrador no painel do Supabase e só membros da equipe entram;
    - escolha na primeira conexão: enviar os dados deste navegador para o
      banco (migração) ou usar os dados do banco;
    - bloco "Banco de dados" em Configurações: status, pendências recusadas,
@@ -58,6 +59,78 @@
 
   /* ------------------------------ Login ------------------------------ */
 
+  /** Campos do formulário de login (usado na tela inicial e na janela). */
+  function camposLoginHtml(cancelar) {
+    const { html } = NS.ui;
+    return html`
+      <div class="campo"><label for="login-email">E-mail</label>
+        <input type="email" id="login-email" name="email" autocomplete="username" required></div>
+      <div class="campo"><label for="login-senha">Senha</label>
+        <input type="password" id="login-senha" name="senha" autocomplete="current-password" required></div>
+      <p class="caixa-alerta" data-login-erro role="alert" hidden></p>
+      <div class="formulario-acoes">
+        ${cancelar ? html`<button type="button" class="botao botao-secundario" data-fechar>Cancelar</button>` : ''}
+        <button type="submit" class="botao botao-primario">Entrar</button>
+      </div>`;
+  }
+
+  /**
+   * Liga o envio do formulário: entra, confere se o usuário é membro da
+   * equipe (se não for, sai de novo e explica) e chama aoEntrar(sessao).
+   */
+  function ligarLogin(form, aoEntrar) {
+    const caixaErro = form.querySelector('[data-login-erro]');
+    const mostrarErro = (msg) => { caixaErro.textContent = msg; caixaErro.hidden = false; };
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const email = form.email.value.trim();
+      const senha = form.senha.value;
+      if (!email || !senha) { mostrarErro('Preencha o e-mail e a senha.'); return; }
+      const botao = form.querySelector('[type="submit"]');
+      botao.disabled = true;
+      botao.textContent = 'Entrando…';
+      try {
+        const s = await cliente().entrar(email, senha);
+        try {
+          await sinc().conferirMembro();
+        } catch (e) {
+          await cliente().sair();
+          throw e;
+        }
+        aoEntrar(s);
+      } catch (e) {
+        mostrarErro(e.message);
+        form.senha.value = '';
+        botao.disabled = false;
+        botao.textContent = 'Entrar';
+      }
+    });
+  }
+
+  /**
+   * Tela de login mostrada antes de qualquer dado (app.js chama quando o
+   * banco está configurado e não há sessão neste navegador).
+   */
+  function telaLogin(el, { aoEntrar }) {
+    const { html } = NS.ui;
+    const semConexao = raiz.navigator && raiz.navigator.onLine === false;
+    el.innerHTML = String(html`
+      <div class="login">
+        <section class="bloco login-cartao" aria-labelledby="login-titulo">
+          <h1 id="login-titulo" tabindex="-1">Controladoria</h1>
+          <p class="subtitulo">Entre com seu usuário para acessar os dados da empresa.</p>
+          ${semConexao ? html`<p class="caixa-alerta">Sem conexão com a internet. O primeiro acesso neste navegador precisa de conexão; depois disso o sistema também funciona offline.</p>` : ''}
+          <form class="formulario" novalidate data-login>${camposLoginHtml(false)}</form>
+          <p class="nota">Não tem usuário ou esqueceu a senha? Fale com o administrador do sistema.</p>
+        </section>
+      </div>`);
+    document.title = 'Entrar · Controladoria';
+    const form = el.querySelector('[data-login]');
+    ligarLogin(form, aoEntrar);
+    form.email.focus();
+  }
+
+  /** Janela de login (para entrar sem sair da tela atual). */
   function abrirLogin() {
     const { html } = NS.ui;
     if (!cliente().configurado()) {
@@ -66,42 +139,13 @@
     }
     const conteudo = html`
       <form class="formulario" novalidate data-login>
-        <p class="formulario-texto">Entre com o usuário criado pelo administrador. Seus dados continuam neste navegador e passam a ser salvos também no banco da empresa.</p>
-        <div class="campo"><label for="login-email">E-mail</label>
-          <input type="email" id="login-email" name="email" autocomplete="username" required></div>
-        <div class="campo"><label for="login-senha">Senha</label>
-          <input type="password" id="login-senha" name="senha" autocomplete="current-password" required></div>
-        <p class="caixa-alerta" data-login-erro hidden></p>
-        <div class="formulario-acoes">
-          <button type="button" class="botao botao-secundario" data-fechar>Cancelar</button>
-          <button type="submit" class="botao botao-primario">Entrar</button>
-        </div>
+        <p class="formulario-texto">Entre com o usuário criado pelo administrador.</p>
+        ${camposLoginHtml(true)}
       </form>`;
-    const janela = NS.ui.modal.abrir({ titulo: 'Conectar ao banco de dados', conteudo });
-    const form = janela.corpo.querySelector('[data-login]');
-    const caixaErro = form.querySelector('[data-login-erro]');
-    form.addEventListener('submit', async (ev) => {
-      ev.preventDefault();
-      const email = form.email.value.trim();
-      const senha = form.senha.value;
-      if (!email || !senha) {
-        caixaErro.textContent = 'Preencha o e-mail e a senha.';
-        caixaErro.hidden = false;
-        return;
-      }
-      const botao = form.querySelector('[type="submit"]');
-      botao.disabled = true;
-      botao.textContent = 'Entrando…';
-      try {
-        const s = await cliente().entrar(email, senha);
-        janela.fechar();
-        NS.ui.avisar(`Conectado como ${s.user.email}.`);
-      } catch (e) {
-        caixaErro.textContent = e.message;
-        caixaErro.hidden = false;
-        botao.disabled = false;
-        botao.textContent = 'Entrar';
-      }
+    const janela = NS.ui.modal.abrir({ titulo: 'Entrar', conteudo });
+    ligarLogin(janela.corpo.querySelector('[data-login]'), (s) => {
+      janela.fechar();
+      NS.ui.avisar(`Conectado como ${s.user.email}.`);
     });
   }
 
@@ -110,13 +154,12 @@
     const ok = await NS.ui.modal.confirmar({
       titulo: 'Sair do banco de dados',
       mensagem: pend
-        ? `Há ${plural(pend, 'alteração ainda não enviada', 'alterações ainda não enviadas')} ao banco. Elas ficam guardadas neste navegador e serão enviadas no próximo login.`
-        : 'Os dados continuam neste navegador. Para sincronizar de novo, basta entrar outra vez.',
+        ? `Há ${plural(pend, 'alteração ainda não enviada', 'alterações ainda não enviadas')} ao banco. Elas ficam guardadas neste navegador e serão enviadas no próximo login. Você voltará para a tela de login.`
+        : 'Você voltará para a tela de login.',
       rotuloConfirmar: 'Sair'
     });
     if (!ok) return;
-    await cliente().sair();
-    NS.ui.avisar('Você saiu do banco de dados. Os dados continuam neste navegador.', 'info');
+    await cliente().sair(); // app.js volta para a tela de login (evento 'sessao:alterada')
   }
 
   /* ------------------------------ Escolha na primeira conexão ------------------------------ */
@@ -252,5 +295,5 @@
     });
   }
 
-  NS.modules.conexao = { iniciar, indicador, painelHtml, abrirLogin };
+  NS.modules.conexao = { iniciar, indicador, painelHtml, abrirLogin, telaLogin };
 })(window);

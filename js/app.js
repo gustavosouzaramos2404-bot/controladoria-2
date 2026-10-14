@@ -1,6 +1,7 @@
 /* ==========================================================================
    app.js
    Inicialização do sistema:
+   - com o banco configurado, exige login (tela de login antes dos dados);
    - carrega os dados do navegador (no primeiro uso, o sistema começa vazio:
      nenhum dado é inventado, tudo é preenchido pelo usuário);
    - monta a navegação lateral e o menu recolhível das telas pequenas;
@@ -179,6 +180,15 @@
       document.getElementById('tela').innerHTML = String(html`<div class="caixa-alerta"><strong>O armazenamento local do navegador está bloqueado.</strong> Libere o armazenamento de sites (localStorage) para este arquivo e recarregue a página. Sem ele, nada que você digitar será salvo.</div>`);
       return;
     }
+    // Com o banco configurado, nada é mostrado antes do login. Quem já entrou
+    // neste navegador continua com acesso offline (a sessão fica salva).
+    const banco = NS.core.supabase;
+    if (banco.configurado() && !banco.sessao()) {
+      document.body.classList.add('modo-login');
+      NS.modules.conexao.telaLogin(document.getElementById('tela'), { aoEntrar: () => location.reload() });
+      return;
+    }
+
     const carga = store.carregar();
     if (carga.erro) {
       document.getElementById('navegacao').innerHTML = '';
@@ -206,6 +216,10 @@
     });
     router.iniciar();
     NS.modules.conexao.iniciar();
+    // Saiu ou a sessão expirou: volta para a tela de login (pendências ficam guardadas).
+    eventos.on('sessao:alterada', (ev) => {
+      if (banco.configurado() && !ev.sessao) location.reload();
+    });
     NS.core.sincronizacao.iniciar({ novo: Boolean(carga.novo) });
   }
 
