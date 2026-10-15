@@ -4,6 +4,7 @@
    continuar abrindo offline):
    - login por e-mail e senha (Supabase Auth), com a sessão guardada neste
      navegador e renovada sozinha antes de expirar;
+   - criação de conta com confirmação por código enviado ao e-mail;
    - chamada das funções do banco (RPC) e consultas simples, sempre com o
      token do usuário (a RLS do banco decide o que cada um pode ver);
    - erros com mensagem em português e marcação de "sem conexão" (offline)
@@ -83,7 +84,7 @@
     if (e.offline) return 'Sem conexão. Verifique a internet e tente de novo.';
     const m = String(e.message || '');
     if (/invalid login credentials/i.test(m)) return 'E-mail ou senha incorretos.';
-    if (/email not confirmed/i.test(m)) return 'O e-mail ainda não foi confirmado. Abra o link enviado ao seu e-mail ou peça ao administrador para confirmar o usuário.';
+    if (/email not confirmed/i.test(m)) return 'O e-mail ainda não foi confirmado. Digite o código enviado ao seu e-mail.';
     if (/too many|rate limit/i.test(m)) return 'Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.';
     return m || 'Não foi possível entrar.';
   }
@@ -107,7 +108,63 @@
       const dados = await requisitar('/auth/v1/token?grant_type=password', { metodo: 'POST', corpo: { email, password: senha } });
       return aceitarSessao(dados);
     } catch (e) {
-      throw erro(mensagemLogin(e), { offline: e.offline });
+      throw erro(mensagemLogin(e), { offline: e.offline, naoConfirmado: /email not confirmed/i.test(String(e.message)) });
+    }
+  }
+
+  /** Traduz as mensagens mais comuns da criação de conta e do código. */
+  function mensagemConta(e) {
+    if (e.offline) return 'Sem conexão. Verifique a internet e tente de novo.';
+    const m = String(e.message || '');
+    if (/already registered|already exists/i.test(m)) return 'Já existe uma conta com este e-mail. Volte e entre com sua senha.';
+    if (/signups? not allowed|signup.*disabled/i.test(m)) return 'A criação de contas está desativada. Fale com o administrador do sistema.';
+    if (/password.*(at least|characters|short)/i.test(m)) return 'A senha é muito curta. Use pelo menos 6 caracteres.';
+    if (/weak.?password|password.*(weak|known|leaked|pwned)/i.test(m)) return 'Essa senha é fraca ou conhecida. Escolha outra senha.';
+    if (/invalid.*email|email.*invalid/i.test(m)) return 'E-mail inválido.';
+    if (/expired|invalid.*(token|otp)|(token|otp).*invalid/i.test(m)) return 'Código inválido ou expirado. Confira o código ou peça um novo.';
+    const espera = m.match(/after (\d+) seconds?/i);
+    if (espera) return `Aguarde ${espera[1]} segundos para pedir outro código.`;
+    if (/too many|rate limit/i.test(m)) return 'Muitos e-mails enviados em pouco tempo. Aguarde alguns minutos e tente de novo.';
+    return m || 'Não foi possível concluir. Tente de novo.';
+  }
+
+  /**
+   * Cria a conta; o Supabase envia o código de confirmação ao e-mail.
+   * Devolve { confirmar: true } (falta digitar o código) ou { sessao }
+   * quando o projeto não exige confirmação de e-mail.
+   */
+  async function criarConta(email, senha, nome) {
+    let dados;
+    try {
+      dados = await requisitar('/auth/v1/signup', { metodo: 'POST', corpo: { email, password: senha, data: { nome } } });
+    } catch (e) {
+      throw erro(mensagemConta(e), { offline: e.offline });
+    }
+    if (dados && dados.access_token) return { sessao: aceitarSessao(dados) };
+    // E-mail já cadastrado e confirmado: o Supabase responde sem identidades e não envia código.
+    const criado = (dados && dados.user) || dados;
+    if (criado && Array.isArray(criado.identities) && !criado.identities.length) {
+      throw erro('Já existe uma conta com este e-mail. Volte e entre com sua senha.');
+    }
+    return { confirmar: true };
+  }
+
+  /** Confere o código recebido por e-mail; se estiver certo, já entra. */
+  async function confirmarCodigo(email, codigo) {
+    try {
+      const dados = await requisitar('/auth/v1/verify', { metodo: 'POST', corpo: { type: 'signup', email, token: codigo } });
+      return aceitarSessao(dados);
+    } catch (e) {
+      throw erro(mensagemConta(e), { offline: e.offline });
+    }
+  }
+
+  /** Envia de novo o código de confirmação. */
+  async function reenviarCodigo(email) {
+    try {
+      await requisitar('/auth/v1/resend', { metodo: 'POST', corpo: { type: 'signup', email } });
+    } catch (e) {
+      throw erro(mensagemConta(e), { offline: e.offline });
     }
   }
 
@@ -175,5 +232,5 @@
     }
   }
 
-  NS.core.supabase = { configurado, sessao, usuario, entrar, sair, renovar, rpc, consultar };
+  NS.core.supabase = { configurado, sessao, usuario, entrar, criarConta, confirmarCodigo, reenviarCodigo, sair, renovar, rpc, consultar };
 })(typeof window !== 'undefined' ? window : globalThis);

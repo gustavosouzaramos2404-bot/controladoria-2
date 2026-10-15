@@ -4,8 +4,9 @@
    - indicador de sincronização no rodapé da navegação (sincronizado, sem
      conexão, alterações aguardando envio, erro) com atalho para entrar;
    - tela de login ANTES de acessar os dados (quando o banco está
-     configurado) e janela de login; usuários são criados pelo
-     administrador no painel do Supabase e só membros da equipe entram;
+     configurado) e janela de login; na tela de login é possível criar
+     uma conta (confirmada por código enviado ao e-mail), mas só membros
+     da equipe, liberados pelo administrador, acessam os dados;
    - escolha na primeira conexão: enviar os dados deste navegador para o
      banco (migração) ou usar os dados do banco;
    - bloco "Banco de dados" em Configurações: status, pendências recusadas,
@@ -77,8 +78,9 @@
   /**
    * Liga o envio do formulário: entra, confere se o usuário é membro da
    * equipe (se não for, sai de novo e explica) e chama aoEntrar(sessao).
+   * Se o e-mail ainda não foi confirmado, chama naoConfirmado(email).
    */
-  function ligarLogin(form, aoEntrar) {
+  function ligarLogin(form, aoEntrar, naoConfirmado) {
     const caixaErro = form.querySelector('[data-login-erro]');
     const mostrarErro = (msg) => { caixaErro.textContent = msg; caixaErro.hidden = false; };
     form.addEventListener('submit', async (ev) => {
@@ -99,6 +101,7 @@
         }
         aoEntrar(s);
       } catch (e) {
+        if (e.naoConfirmado && naoConfirmado) { naoConfirmado(email); return; }
         mostrarErro(e.message);
         form.senha.value = '';
         botao.disabled = false;
@@ -118,16 +121,151 @@
       <div class="login">
         <section class="bloco login-cartao" aria-labelledby="login-titulo">
           <h1 id="login-titulo" tabindex="-1">Controladoria</h1>
-          <p class="subtitulo">Entre com seu usuário para acessar os dados da empresa.</p>
           ${semConexao ? html`<p class="caixa-alerta">Sem conexão com a internet. O primeiro acesso neste navegador precisa de conexão; depois disso o sistema também funciona offline.</p>` : ''}
-          <form class="formulario" novalidate data-login>${camposLoginHtml(false)}</form>
-          <p class="nota">Não tem usuário ou esqueceu a senha? Fale com o administrador do sistema.</p>
+          <div data-login-etapa></div>
         </section>
       </div>`);
-    document.title = 'Entrar · Controladoria';
-    const form = el.querySelector('[data-login]');
-    ligarLogin(form, aoEntrar);
-    form.email.focus();
+    const etapa = el.querySelector('[data-login-etapa]');
+
+    /** Troca o conteúdo do cartão e liga os botões "data-ir" (entrar / criar). */
+    function mostrar(titulo, conteudo) {
+      document.title = `${titulo} · Controladoria`;
+      etapa.innerHTML = String(conteudo);
+      etapa.querySelectorAll('[data-ir]').forEach((b) => b.addEventListener('click', () => {
+        if (b.dataset.ir === 'criar') mostrarCriar();
+        else mostrarEntrar();
+      }));
+      const primeiro = etapa.querySelector('input');
+      if (primeiro) primeiro.focus();
+    }
+
+    function mostrarEntrar(email) {
+      mostrar('Entrar', html`
+        <p class="subtitulo">Entre com seu usuário para acessar os dados da empresa.</p>
+        <form class="formulario" novalidate data-login>${camposLoginHtml(false)}</form>
+        <p class="nota">Ainda não tem conta? <button type="button" class="botao-link" data-ir="criar">Criar uma conta</button></p>
+        <p class="nota">Esqueceu a senha? Fale com o administrador do sistema.</p>`);
+      const form = etapa.querySelector('[data-login]');
+      if (email) { form.email.value = email; form.senha.focus(); }
+      ligarLogin(form, aoEntrar, (e) => mostrarCodigo(e, 'Sua conta ainda não foi confirmada. Digite o código enviado ao seu e-mail ou peça um novo.'));
+    }
+
+    function mostrarCriar() {
+      mostrar('Criar conta', html`
+        <p class="subtitulo">Crie sua conta. Enviaremos um código de confirmação para o seu e-mail.</p>
+        <form class="formulario" novalidate data-criar>
+          <div class="campo"><label for="criar-nome">Nome</label>
+            <input type="text" id="criar-nome" name="nome" autocomplete="name" required></div>
+          <div class="campo"><label for="criar-email">E-mail</label>
+            <input type="email" id="criar-email" name="email" autocomplete="email" required></div>
+          <div class="campo"><label for="criar-senha">Senha</label>
+            <input type="password" id="criar-senha" name="senha" autocomplete="new-password" minlength="6" required>
+            <p class="ajuda">Pelo menos 6 caracteres.</p></div>
+          <div class="campo"><label for="criar-senha2">Repita a senha</label>
+            <input type="password" id="criar-senha2" name="senha2" autocomplete="new-password" required></div>
+          <p class="caixa-alerta" data-login-erro role="alert" hidden></p>
+          <div class="formulario-acoes">
+            <button type="button" class="botao botao-secundario" data-ir="entrar">Voltar</button>
+            <button type="submit" class="botao botao-primario">Criar conta</button>
+          </div>
+        </form>`);
+      const form = etapa.querySelector('[data-criar]');
+      const caixaErro = form.querySelector('[data-login-erro]');
+      const mostrarErro = (msg) => { caixaErro.textContent = msg; caixaErro.hidden = false; };
+      form.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const nome = form.nome.value.trim();
+        const email = form.email.value.trim();
+        const senha = form.senha.value;
+        if (!nome || !email || !senha) { mostrarErro('Preencha o nome, o e-mail e a senha.'); return; }
+        if (!form.email.checkValidity()) { mostrarErro('E-mail inválido.'); return; }
+        if (senha.length < 6) { mostrarErro('A senha precisa ter pelo menos 6 caracteres.'); return; }
+        if (senha !== form.senha2.value) { mostrarErro('As senhas não conferem.'); return; }
+        const botao = form.querySelector('[type="submit"]');
+        botao.disabled = true;
+        botao.textContent = 'Criando…';
+        try {
+          const r = await cliente().criarConta(email, senha, nome);
+          if (r.sessao) await concluir();
+          else mostrarCodigo(email);
+        } catch (e) {
+          mostrarErro(e.message);
+          botao.disabled = false;
+          botao.textContent = 'Criar conta';
+        }
+      });
+    }
+
+    function mostrarCodigo(email, aviso) {
+      mostrar('Confirmar e-mail', html`
+        <p class="subtitulo">Enviamos um código de confirmação para <strong>${email}</strong>. Digite-o abaixo para ativar sua conta.</p>
+        ${aviso ? html`<p class="caixa-info">${aviso}</p>` : ''}
+        <form class="formulario" novalidate data-codigo>
+          <div class="campo"><label for="codigo">Código</label>
+            <input type="text" id="codigo" name="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required></div>
+          <p class="caixa-alerta" data-login-erro role="alert" hidden></p>
+          <div class="formulario-acoes">
+            <button type="button" class="botao botao-secundario" data-ir="entrar">Voltar</button>
+            <button type="submit" class="botao botao-primario">Confirmar</button>
+          </div>
+        </form>
+        <p class="nota">Não recebeu? Confira a caixa de spam ou <button type="button" class="botao-link" data-reenviar>envie o código de novo</button>.</p>
+        <p class="nota" data-reenvio role="status"></p>`);
+      const form = etapa.querySelector('[data-codigo]');
+      const caixaErro = form.querySelector('[data-login-erro]');
+      const mostrarErro = (msg) => { caixaErro.textContent = msg; caixaErro.hidden = false; };
+      form.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const codigo = form.codigo.value.replace(/\s+/g, '');
+        if (!/^\d{6,10}$/.test(codigo)) { mostrarErro('Digite o código numérico recebido no e-mail.'); return; }
+        const botao = form.querySelector('[type="submit"]');
+        botao.disabled = true;
+        botao.textContent = 'Confirmando…';
+        try {
+          await cliente().confirmarCodigo(email, codigo);
+          await concluir();
+        } catch (e) {
+          mostrarErro(e.message);
+          botao.disabled = false;
+          botao.textContent = 'Confirmar';
+        }
+      });
+      const reenviar = etapa.querySelector('[data-reenviar]');
+      const situacao = etapa.querySelector('[data-reenvio]');
+      reenviar.addEventListener('click', async () => {
+        reenviar.disabled = true;
+        situacao.textContent = 'Enviando…';
+        try {
+          await cliente().reenviarCodigo(email);
+          situacao.textContent = 'Código enviado. Use o código mais recente.';
+        } catch (e) {
+          situacao.textContent = e.message;
+        }
+        reenviar.disabled = false;
+      });
+    }
+
+    /**
+     * Conta confirmada (já com sessão): entra se o usuário for membro da
+     * equipe; se ainda não for, sai e explica que falta a liberação.
+     */
+    async function concluir() {
+      try {
+        await sinc().conferirMembro();
+      } catch (e) {
+        const u = cliente().usuario();
+        await cliente().sair();
+        if (!e.naoMembro) { mostrarEntrar(u && u.email); return; }
+        mostrar('Conta criada', html`
+          <p class="caixa-info"><strong>Conta criada e e-mail confirmado.</strong></p>
+          <p class="subtitulo">Para acessar os dados da empresa, um administrador precisa incluir ${u ? html`<strong>${u.email}</strong>` : 'seu usuário'} na equipe. Depois disso, é só entrar com seu e-mail e senha.</p>
+          <div class="formulario-acoes"><button type="button" class="botao botao-primario" data-ir="entrar">Ir para o login</button></div>`);
+        return;
+      }
+      aoEntrar(cliente().sessao());
+    }
+
+    mostrarEntrar();
   }
 
   /** Janela de login (para entrar sem sair da tela atual). */

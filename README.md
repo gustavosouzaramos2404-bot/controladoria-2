@@ -97,10 +97,19 @@ Para usar o app sem banco, deixe `url` em branco.
 
 ### 3. Usuários e equipe
 
-1. **Desative o cadastro aberto:** Authentication → Sign In / Providers → desligue
-   *Allow new users to sign up*. Os usuários passam a ser criados só pelo administrador.
-2. **Crie os usuários:** Authentication → Users → *Add user*, com *Auto Confirm User* marcado.
-3. **Inclua cada usuário na equipe** pelo SQL Editor (o primeiro como `admin`):
+1. **Cadastro pela tela de login:** a pessoa clica em *Criar uma conta*, informa nome, e-mail e
+   senha e digita o código de 6 dígitos que chega no e-mail. Para isso, no painel do Supabase:
+   - Authentication → Sign In / Providers → *Allow new users to sign up* **ligado** e, em Email,
+     *Confirm email* **ligado**;
+   - Authentication → Emails → *Confirm signup*: troque o link pelo código, por exemplo
+     `<p>Seu código de confirmação: <strong>{{ .Token }}</strong></p>`;
+   - o envio de e-mails padrão do Supabase tem limite baixo (poucos por hora). Para uso real,
+     configure um SMTP próprio em Authentication → Emails → SMTP Settings.
+
+   Se preferir que só o administrador crie usuários, desligue *Allow new users to sign up* e crie
+   em Authentication → Users → *Add user*, com *Auto Confirm User* marcado.
+2. **Libere cada usuário na equipe** pelo SQL Editor (o primeiro como `admin`). Criar a conta não
+   dá acesso aos dados: até ser incluída aqui, a pessoa vê o aviso de que aguarda liberação.
    ```sql
    insert into public.membros (user_id, nome, papel)
    select id, 'Nome da pessoa', 'admin'   -- ou 'membro'
