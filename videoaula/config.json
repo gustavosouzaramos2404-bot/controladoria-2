@@ -8,7 +8,7 @@
   "tema": "light",
   "relogio": "2026-10-26T09:00:00-03:00",
   "versaoSistema": "1.0.0",
-  "respiroS": 0.6,
+  "respiroS": 0.25,
   "tts": {
     "provedores": [
       "elevenlabs",
@@ -69,7 +69,7 @@
     "painel-central",
     "contrato-itens"
   ],
-  "leadS": 0.5,
+  "leadS": 0.25,
   "alteracoesAutorizadas": [
     "js/modules/videoaula.js",
     "js/app.js",

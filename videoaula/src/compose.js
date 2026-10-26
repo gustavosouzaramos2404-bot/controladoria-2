@@ -2,8 +2,9 @@
    videoaula/src/compose.js
    Monta o vídeo final a partir dos clipes e áudios de cada cena:
    - segmento por cena (cache/segmentos): zoom suave (aplicado aqui, para
-     não deformar o layout na gravação) e fade de 300 ms nas trocas de
-     capítulo; duração arredondada ao quadro e igual no vídeo e no áudio;
+     não deformar o layout na gravação) e fade de 300 ms só nas telas de
+     abertura e encerramento (entre as cenas o corte é direto, contínuo);
+     duração arredondada ao quadro e igual no vídeo e no áudio;
    - áudio por cena: narração com atraso exato (adelay = lead), fade de
      30 ms, silêncio até o fim da cena; depois concatenação, compressão
      leve e loudness normalizado (-16 LUFS, pico -1,5 dBTP, em 2 passadas);
@@ -146,8 +147,11 @@ function compor(cenas, metas, audios, { nome = 'videoaula', legendado = true, lo
   const wavs = [];
   cenas.forEach((cena, i) => {
     const meta = metas[cena.id];
-    const fadeIn = i === 0 || cenas[i - 1].capitulo !== cena.capitulo;
-    const fadeOut = i === cenas.length - 1 || cenas[i + 1].capitulo !== cena.capitulo;
+    // Fade só no começo, no fim e nas telas de abertura/encerramento: entre as cenas
+    // do sistema o corte é direto, para a aula correr sem parecer que parou.
+    const cartao = (c) => Boolean(c) && c.tipo === 'cartao';
+    const fadeIn = i === 0 || cartao(cena) || cartao(cenas[i - 1]);
+    const fadeOut = i === cenas.length - 1 || cartao(cena) || cartao(cenas[i + 1]);
     const seg = segmento(cena, meta, { fadeIn, fadeOut });
     segs.push(seg.arquivo);
     wavs.push(audioCena(cena, audios[cena.id], meta, seg.duracao, dirTrab));

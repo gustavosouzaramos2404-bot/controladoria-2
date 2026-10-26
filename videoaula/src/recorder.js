@@ -93,8 +93,12 @@ function htmlCartao(c, cfg) {
   <footer>${esc(c.rodape || `Sistema versão ${cfg.versaoSistema}`)}</footer></body></html>`;
 }
 
-/** Grava uma cena. "audio" é o resultado do TTS para ela. */
-async function gravarCena(cena, audio, { log = console.log } = {}) {
+/**
+ * Grava uma cena. "audio" é o resultado do TTS para ela. "estadoInicial" é
+ * como a cena anterior terminou (cursor, endereço e rolagem): a cena começa
+ * dali, para o corte entre cenas não parecer um recomeço.
+ */
+async function gravarCena(cena, audio, { log = console.log, estadoInicial = null } = {}) {
   const cfg = config();
   const lead = cfg.leadS ?? 0.5;
   const respiro = cfg.respiroS ?? 0.6;
@@ -115,13 +119,19 @@ async function gravarCena(cena, audio, { log = console.log } = {}) {
       await pagina.evaluate(scriptPagina);
       await pagina.evaluate(() => window.__videoaula.montar());
       await pagina.evaluate((t) => window.__videoaula.capitulo(t), cena.capitulo);
+      if (estadoInicial) {
+        await pagina.evaluate((e) => {
+          window.__videoaula.colocar(e.x, e.y);
+          if (e.caminho === location.hash.split('?')[0]) window.scrollTo(0, e.rolagem);
+        }, estadoInicial);
+      }
       await pagina.waitForTimeout(700); // deixa a barra do capítulo e os gráficos assentarem
     }
     const captura = await iniciarCaptura(pagina, dirQuadros);
     const t0 = agoraS();
     const ui = criarControle(pagina, { registrarZoom: (z) => zooms.push(Object.assign(z, { inicio: z.inicio - t0 })), agora: agoraS });
     const inicioFala = t0 + lead;
-    let livreEm = t0 + 0.3; // instante em que a ação anterior terminou
+    let livreEm = t0; // instante em que a ação anterior terminou
     for (const [k, acao] of (cena.acoes || []).entries()) {
       const n = String(k + 1);
       const marcador = acao.marca != null ? audio.marcadores[String(acao.marca)] : undefined;
@@ -156,15 +166,20 @@ async function gravarCena(cena, audio, { log = console.log } = {}) {
     const fim = Math.max(fimFala, fimAcoes, Math.min(livreEm + 0.8, fimFala + 2), t0 + (cena.minDuracaoS || 0));
     await espera((fim - agoraS()) * 1000 + 250);
     textoVisto += '\n' + await pagina.evaluate(() => document.body.innerText).catch(() => '');
+    const estadoFinal = cena.tipo === 'cartao' ? null : await pagina.evaluate(() => {
+      const c = window.__videoaula.posicao();
+      return { x: Math.round(c.x), y: Math.round(c.y), caminho: location.hash.split('?')[0], rolagem: Math.round(window.scrollY) };
+    }).catch(() => null);
     await captura.parar();
     const dur = fim - t0;
     codificarClipe(captura.quadros, t0, dur, destinoMp4);
     textoVisto = textoVisto.replace(/ /g, ' ');
     const conferirFaltando = (cena.conferir || []).filter((t) => !textoVisto.includes(t));
     const meta = {
-      id: cena.id, capitulo: cena.capitulo, tipo: cena.tipo || 'tela', hashEntrada: entradaCena(cena, audio),
+      id: cena.id, capitulo: cena.capitulo, tipo: cena.tipo || 'tela', hashEntrada: entradaCena(cena, audio, estadoInicial),
       duracao: dur, lead, audio: audio.arquivo, duracaoAudio: audio.duracao, quadros: captura.quadros.length,
-      acoes: registroAcoes, zooms, avisos, errosConsole: [...errosConsole], conferirFaltando, gravadoEm: new Date().toISOString()
+      acoes: registroAcoes, zooms, avisos, errosConsole: [...errosConsole], conferirFaltando,
+      estadoInicial, estadoFinal, gravadoEm: new Date().toISOString()
     };
     gravarJSON(destinoMeta, meta);
     log(`  gravada ${cena.id.padEnd(28)} ${dur.toFixed(1).padStart(5)} s, ${captura.quadros.length} quadros${avisos.length ? `, ${avisos.length} aviso(s)` : ''}`);
@@ -176,22 +191,26 @@ async function gravarCena(cena, audio, { log = console.log } = {}) {
 }
 
 /** Hash de tudo o que influencia o clipe (para regravar só o que mudou). */
-function entradaCena(cena, audio) {
-  return hash(cena, audio.arquivo, hashArquivo(path.join(RAIZ, 'dados', 'demo.json')), VERSAO_GRAVADOR, config().video, config().relogio, config().leadS, config().respiroS);
+function entradaCena(cena, audio, estadoInicial = null) {
+  return hash(cena, audio.arquivo, estadoInicial, hashArquivo(path.join(RAIZ, 'dados', 'demo.json')), VERSAO_GRAVADOR, config().video, config().relogio, config().leadS, config().respiroS);
 }
 
 /** Grava as cenas cujo clipe está ausente ou desatualizado (ou todas, com forcar). */
 async function gravarTodas(cenas, audios, { forcar = [], log = console.log } = {}) {
   const metas = {};
+  let anterior = null; // como a cena anterior terminou (encadeia as cenas)
   for (const cena of cenas) {
+    const estadoInicial = cena.tipo === 'cartao' ? null : anterior;
     const meta = lerJSON(path.join(DIR.clipes, `${cena.id}.json`), null);
-    const atual = meta && fs.existsSync(path.join(DIR.clipes, `${cena.id}.mp4`)) && meta.hashEntrada === entradaCena(cena, audios[cena.id]);
+    const atual = meta && fs.existsSync(path.join(DIR.clipes, `${cena.id}.mp4`)) && meta.hashEntrada === entradaCena(cena, audios[cena.id], estadoInicial);
     if (atual && !forcar.includes(cena.id) && !forcar.includes('*')) {
       metas[cena.id] = meta;
+      anterior = meta.estadoFinal || null;
       log(`  clipe  ${cena.id.padEnd(28)} (cache)`);
       continue;
     }
-    metas[cena.id] = await gravarCena(cena, audios[cena.id], { log });
+    metas[cena.id] = await gravarCena(cena, audios[cena.id], { log, estadoInicial });
+    anterior = metas[cena.id].estadoFinal || null;
   }
   return metas;
 }

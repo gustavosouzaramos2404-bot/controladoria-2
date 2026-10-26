@@ -15,21 +15,21 @@
     {
       id: 'completa',
       titulo: 'Videoaula completa: do Painel ao fechamento do mês',
-      duracao: '24:54',
+      duracao: '24:32',
       descricao: 'Todas as telas do sistema, com narração: Painel, Cadastros, Custos e produção, Estoque e perdas, Contratos públicos, Orçamento e Configurações.',
       arquivo: 'midia/videoaula-completa.mp4',
       legendas: 'midia/videoaula-completa.vtt',
       capitulos: [
         { inicio: 0, titulo: 'Abertura' },
-        { inicio: 49.1, titulo: 'Primeiros passos' },
-        { inicio: 152.2, titulo: 'Painel' },
-        { inicio: 499.1, titulo: 'Cadastros' },
-        { inicio: 653.6, titulo: 'Custos e produção' },
-        { inicio: 825.1, titulo: 'Estoque e perdas' },
-        { inicio: 961.6, titulo: 'Contratos públicos' },
-        { inicio: 1228.9, titulo: 'Orçamento' },
-        { inicio: 1352.8, titulo: 'Configurações' },
-        { inicio: 1437.1, titulo: 'Encerramento' }
+        { inicio: 48.5, titulo: 'Primeiros passos' },
+        { inicio: 150.4, titulo: 'Painel' },
+        { inicio: 493.1, titulo: 'Cadastros' },
+        { inicio: 645.5, titulo: 'Custos e produção' },
+        { inicio: 814.3, titulo: 'Estoque e perdas' },
+        { inicio: 948.4, titulo: 'Contratos públicos' },
+        { inicio: 1212.1, titulo: 'Orçamento' },
+        { inicio: 1333.6, titulo: 'Configurações' },
+        { inicio: 1416.7, titulo: 'Encerramento' }
       ]
     },
     {

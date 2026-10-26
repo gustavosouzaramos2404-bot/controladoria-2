@@ -46,6 +46,8 @@ function scriptPagina() {
   window.__videoaula = {
     montar,
     posicao: () => ({ x: estado.x, y: estado.y }),
+    /** Põe o cursor direto numa posição (início da cena, onde a anterior parou). */
+    colocar(x, y) { montar(); estado.animacao++; posicionar(x, y); },
     /** Move o cursor numa curva (Bézier quadrática) até (x, y). */
     mover(x, y, ms) {
       montar();

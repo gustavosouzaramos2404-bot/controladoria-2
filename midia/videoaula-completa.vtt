@@ -1,1606 +1,1606 @@
 WEBVTT
 
-00:00.595 --> 00:01.595
+00:00.345 --> 00:01.345
 Olá!
 
-00:01.807 --> 00:04.730
+00:01.557 --> 00:04.480
 Nesta aula, você vai aprender
 a usar o Controladoria,
 
-00:04.864 --> 00:08.219
+00:04.614 --> 00:07.969
 o sistema de controladoria feito para
 uma indústria de alimentos que vende ao
 
-00:08.239 --> 00:09.239
+00:07.989 --> 00:08.989
 setor público.
 
-00:09.818 --> 00:11.764
+00:09.568 --> 00:11.514
 Ele responde a uma pergunta simples:
 
-00:11.864 --> 00:12.911
+00:11.614 --> 00:12.661
 estamos indo bem?
 
-00:13.545 --> 00:18.548
+00:13.295 --> 00:18.298
 Para isso, reúne num só lugar os indicadores,
 os custos de produção, o estoque,
 
-00:18.636 --> 00:21.230
+00:18.386 --> 00:20.980
 os contratos com órgãos
 públicos e o orçamento.
 
-00:21.864 --> 00:23.661
+00:21.614 --> 00:23.411
 A aula segue a ordem do menu.
 
-00:24.295 --> 00:27.343
+00:24.045 --> 00:27.093
 Primeiro, a visão geral e
 o carregamento dos dados.
 
-00:27.977 --> 00:31.730
+00:27.727 --> 00:31.480
 Depois, o Painel, que é onde
 você começa todos os dias.
 
-00:32.364 --> 00:33.185
+00:32.114 --> 00:32.935
 Em seguida:
 
-00:33.205 --> 00:38.355
+00:32.955 --> 00:38.105
 Cadastros, Custos e produção, Estoque e
 perdas, Contratos públicos, Orçamento
 
-00:38.375 --> 00:39.502
+00:38.125 --> 00:39.252
 e Configurações.
 
-00:40.136 --> 00:43.139
+00:39.886 --> 00:42.889
 No final, deixo uma rotina
 de uso para o dia a dia.
 
-00:43.773 --> 00:47.855
+00:43.523 --> 00:47.605
 Todos os dados que você vai ver são
 fictícios, criados só para esta aula.
 
-00:49.695 --> 00:52.095
+00:48.845 --> 00:51.245
 Este é o sistema logo
 depois da instalação.
 
-00:52.725 --> 00:56.545
+00:51.875 --> 00:55.695
 À esquerda fica o menu, com uma seção
 para cada área da controladoria.
 
-00:57.180 --> 01:01.455
+00:56.330 --> 01:00.605
 No rodapé do menu aparecem o usuário,
 a versão e a situação dos dados.
 
-01:02.089 --> 01:05.114
+01:01.239 --> 01:04.264
 Aqui, ele avisa que os dados
 ficam só neste navegador,
 
-01:05.202 --> 01:08.182
+01:04.352 --> 01:07.332
 porque nesta demonstração não
 conectamos o banco da empresa.
 
-01:08.816 --> 01:10.795
+01:07.966 --> 01:09.945
 Repare no bloco Primeiros passos.
 
-01:11.430 --> 01:13.784
+01:10.580 --> 01:12.934
 O Controladoria começa vazio de propósito:
 
-01:13.816 --> 01:15.398
+01:12.966 --> 01:14.548
 ele nunca inventa números.
 
-01:16.032 --> 01:19.239
+01:15.182 --> 01:18.389
 Este bloco lista o que falta
 preencher para o painel funcionar.
 
-01:19.873 --> 01:21.080
+01:19.023 --> 01:20.230
 Um aviso importante:
 
-01:21.157 --> 01:24.307
+01:20.307 --> 01:23.457
 nesta versão, cinco itens
 do menu ainda não têm tela.
 
-01:24.941 --> 01:25.762
+01:24.091 --> 01:24.912
 São eles:
 
-01:25.782 --> 01:30.341
+01:24.932 --> 01:29.491
 Caixa e capital de giro, Demonstrações,
 Controles internos, Planos de ação
 
-01:30.361 --> 01:31.361
+01:29.511 --> 01:30.511
 e Relatórios.
 
-01:31.861 --> 01:36.080
+01:31.011 --> 01:35.230
 Se você clicar neles, o sistema mostra
 a mensagem Página não encontrada.
 
-01:36.714 --> 01:41.182
+01:35.864 --> 01:40.332
 Por isso, nesta aula, vamos trabalhar
 com as sete telas de gestão disponíveis.
 
-01:41.816 --> 01:46.955
+01:40.966 --> 01:46.105
 E, logo acima de Configurações, fica a aba
 Videoaula, onde você encontra esta aula,
 
-01:47.077 --> 01:49.875
+01:46.227 --> 01:49.025
 com capítulos e legendas,
 para rever quando quiser.
 
-01:51.695 --> 01:55.891
+01:50.245 --> 01:54.441
 Para não começar do zero, vamos carregar
 um backup com dados de demonstração.
 
-01:56.520 --> 01:59.659
+01:55.070 --> 01:58.209
 Abra Configurações e desça
 até o bloco Backup e dados.
 
-02:00.293 --> 02:03.057
+01:58.843 --> 02:01.607
 Clique em Importar backup
 JSON e escolha o arquivo.
 
-02:03.691 --> 02:06.807
+02:02.241 --> 02:05.357
 Antes de trocar qualquer coisa,
 o sistema valida o arquivo
 
-02:06.827 --> 02:08.773
+02:05.377 --> 02:07.323
 e mostra quantos registros ele tem.
 
-02:09.407 --> 02:13.295
+02:07.957 --> 02:11.845
 Ele também avisa que a importação
 substitui todos os dados atuais.
 
-02:13.930 --> 02:15.625
+02:12.480 --> 02:14.175
 Confirme em Importar backup.
 
-02:16.259 --> 02:16.898
+02:14.809 --> 02:15.448
 Pronto:
 
-02:16.918 --> 02:19.693
+02:15.468 --> 02:18.243
 a mensagem Backup importado
 confirma a operação.
 
-02:20.327 --> 02:24.239
+02:18.877 --> 02:22.789
 Esse mesmo caminho serve para restaurar
 uma cópia de segurança no dia a dia.
 
-02:24.873 --> 02:29.182
+02:23.423 --> 02:27.732
 Agora, a empresa fictícia Serra Verde
 Alimentos aparece no topo do menu.
 
-02:29.816 --> 02:30.977
+02:28.366 --> 02:29.527
 Vamos ao Painel.
 
-02:32.829 --> 02:34.763
+02:30.779 --> 02:32.713
 O Painel se chama Estamos indo bem?
 
-02:35.392 --> 02:36.974
+02:33.342 --> 02:34.924
 e é a primeira tela do dia.
 
-02:37.608 --> 02:41.804
+02:35.558 --> 02:39.754
 No topo, você escolhe a competência,
 ou seja, o mês analisado.
 
-02:42.438 --> 02:44.599
+02:40.388 --> 02:42.549
 Por padrão, é o último mês fechado:
 
-02:44.745 --> 02:46.599
+02:42.695 --> 02:44.549
 setembro de 2026.
 
-02:47.233 --> 02:49.224
+02:45.183 --> 02:47.174
 Ao lado, escolha a comparação:
 
-02:49.347 --> 02:52.395
+02:47.297 --> 02:50.345
 com o mês anterior, ou com o
 mesmo mês do ano anterior.
 
-02:53.029 --> 02:56.679
+02:50.979 --> 02:54.629
 A comparação anual ajuda a separar
 o que é sazonal do que é tendência.
 
-02:57.313 --> 02:59.224
+02:55.263 --> 02:57.174
 Vamos voltar para o mês anterior.
 
-02:59.858 --> 03:01.167
+02:57.808 --> 02:59.117
 Repare no subtítulo:
 
-03:01.290 --> 03:03.736
+02:59.240 --> 03:01.686
 os alertas sempre consideram
 a situação de hoje,
 
-03:03.870 --> 03:05.940
+03:01.820 --> 03:03.890
 mesmo quando você olha um mês passado.
 
-03:06.574 --> 03:07.168
+03:04.524 --> 03:05.118
 Dica:
 
-03:07.188 --> 03:10.429
+03:05.138 --> 03:08.379
 troque a competência para um mês anterior
 quando quiser rever uma reunião de
 
-03:10.449 --> 03:11.449
+03:08.399 --> 03:09.399
 resultado.
 
-03:11.779 --> 03:13.917
+03:09.729 --> 03:11.867
 Todos os números do Painel acompanham.
 
-03:15.762 --> 03:17.787
+03:13.112 --> 03:15.137
 Logo abaixo está o resumo do mês.
 
-03:18.417 --> 03:21.044
+03:15.767 --> 03:18.394
 Repare que o faturamento
 nunca aparece sozinho.
 
-03:21.678 --> 03:25.771
+03:19.028 --> 03:23.121
 Ao lado dele estão a margem de contribuição,
 o custo real comparado ao padrão,
 
-03:25.894 --> 03:27.896
+03:23.244 --> 03:25.246
 as entregas no prazo e as glosas.
 
-03:28.530 --> 03:32.385
+03:25.880 --> 03:29.735
 Vender mais não adianta se a margem
 cai, ou se o órgão glosa a nota.
 
-03:33.019 --> 03:37.010
+03:30.369 --> 03:34.360
 O último cartão mostra o menor saldo de
 caixa projetado para as próximas treze
 
-03:37.030 --> 03:38.030
+03:34.380 --> 03:35.380
 semanas.
 
-03:38.394 --> 03:41.180
+03:35.744 --> 03:38.530
 Ele avisa com antecedência se
 algum período vai apertar.
 
-03:41.814 --> 03:45.783
+03:39.164 --> 03:43.133
 Em setembro, a empresa faturou cerca
 de novecentos e quarenta mil reais.
 
-03:46.417 --> 03:49.464
+03:43.767 --> 03:46.814
 Mas o custo ficou quase nove
 por cento acima do padrão,
 
-03:49.644 --> 03:52.044
+03:46.994 --> 03:49.394
 e as entregas no prazo
 ficaram abaixo da meta.
 
-03:52.678 --> 03:54.112
+03:50.028 --> 03:51.462
 Vamos entender por quê.
 
-03:55.962 --> 03:57.533
+03:52.712 --> 03:54.283
 Este é o coração do Painel:
 
-03:57.655 --> 03:58.976
+03:54.405 --> 03:55.726
 a Central de desvios.
 
-03:59.605 --> 04:02.210
+03:56.355 --> 03:58.960
 Cada desvio mostra a
 evidência e quem pode agir.
 
-04:02.844 --> 04:06.006
+03:59.594 --> 04:02.756
 No canto, a contagem separa
 os críticos, os de atenção
 
-04:06.026 --> 04:07.948
+04:02.776 --> 04:04.698
 e os que ainda não têm ação registrada.
 
-04:08.583 --> 04:10.039
+04:05.333 --> 04:06.789
 Use os filtros para focar.
 
-04:10.673 --> 04:12.346
+04:07.423 --> 04:09.096
 Vou mostrar só os críticos.
 
-04:12.980 --> 04:14.778
+04:09.730 --> 04:11.528
 O primeiro é um recebível vencido:
 
-04:14.844 --> 04:18.948
+04:11.594 --> 04:15.698
 a Prefeitura de Bom Retiro do Norte tem
 dois empenhos liquidados sem pagamento,
 
-04:19.083 --> 04:21.221
+04:15.833 --> 04:17.971
 somando mais de duzentos mil reais.
 
-04:21.855 --> 04:25.289
+04:18.605 --> 04:22.039
 No setor público, atraso de
 pagamento vira falta de caixa,
 
-04:25.378 --> 04:27.642
+04:22.128 --> 04:24.392
 por isso este alerta vem antes dos outros.
 
-04:28.276 --> 04:33.142
+04:25.026 --> 04:29.892
 O segundo pede para avaliar o reequilíbrio
 ou o reajuste da Ata 012/2025:
 
-04:33.321 --> 04:37.130
+04:30.071 --> 04:33.880
 o custo do achocolatado está bem acima
 do custo considerado na proposta.
 
-04:37.764 --> 04:38.764
+04:34.514 --> 04:35.514
 Veja o aviso:
 
-04:38.798 --> 04:40.312
+04:35.548 --> 04:37.062
 é uma indicação gerencial.
 
-04:40.946 --> 04:43.881
+04:37.696 --> 04:40.631
 Quem valida o pedido é o jurídico,
 conforme o contrato e a Lei 14.
 
-04:43.901 --> 04:47.210
+04:40.651 --> 04:43.960
 133/2021.
 
-04:47.844 --> 04:49.176
+04:44.594 --> 04:45.926
 O sistema recomenda;
 
-04:49.264 --> 04:50.596
+04:46.014 --> 04:47.346
 quem decide é o gestor.
 
-04:52.429 --> 04:54.351
+04:48.579 --> 04:50.501
 Todo desvio pede uma resposta.
 
-04:54.981 --> 04:57.642
+04:51.131 --> 04:53.792
 Clique em Registrar ação,
 no recebível vencido.
 
-04:58.276 --> 05:01.563
+04:54.426 --> 04:57.713
 O formulário já vem preenchido
 com o desvio, uma ação sugerida
 
-05:01.583 --> 05:03.199
+04:57.733 --> 04:59.349
 e um prazo de quinze dias.
 
-05:03.833 --> 05:05.233
+04:59.983 --> 05:01.383
 Escreva a causa provável:
 
-05:05.322 --> 05:08.597
+05:01.472 --> 05:04.747
 aqui, o órgão aguarda um repasse
 para quitar os empenhos.
 
-05:09.231 --> 05:12.767
+05:05.381 --> 05:08.917
 Depois, ajuste a ação sugerida,
 de forma verificável:
 
-05:12.879 --> 05:14.790
+05:09.029 --> 05:10.940
 quem faz o quê, e até quando.
 
-05:15.424 --> 05:18.427
+05:11.574 --> 05:14.577
 Indique o responsável pelo
 nome, e não pela área.
 
-05:19.061 --> 05:20.540
+05:15.211 --> 05:16.690
 Salve em Registrar ação.
 
-05:21.174 --> 05:24.540
+05:17.324 --> 05:20.690
 O plano fica ligado ao desvio
 e aparece aqui, na Central.
 
-05:25.174 --> 05:28.926
+05:21.324 --> 05:25.076
 Assim, na próxima reunião, ninguém
 precisa perguntar o que foi feito:
 
-05:29.004 --> 05:30.004
+05:25.154 --> 05:26.154
 está registrado.
 
-05:30.583 --> 05:35.245
+05:26.733 --> 05:31.395
 Se um alerta não fizer sentido, existe
 também o botão Dispensar com justificativa.
 
-05:35.879 --> 05:38.779
+05:32.029 --> 05:34.929
 A justificativa fica no
 log, com autor e data.
 
-05:40.629 --> 05:42.552
+05:36.179 --> 05:38.102
 Agora, um caso de exceção.
 
-05:43.181 --> 05:45.240
+05:38.731 --> 05:40.790
 Vou filtrar os alertas de atenção.
 
-05:45.874 --> 05:50.036
+05:41.424 --> 05:45.586
 Este avisa que a certidão negativa de
 débitos estaduais vence em poucos dias.
 
-05:50.670 --> 05:54.161
+05:46.220 --> 05:49.711
 Mas a renovação já foi pedida,
 então não há o que fazer agora.
 
-05:54.795 --> 05:56.922
+05:50.345 --> 05:52.472
 Clique em Dispensar com justificativa.
 
-05:57.556 --> 05:58.604
+05:53.106 --> 05:54.154
 Escreva o motivo:
 
-05:58.681 --> 06:02.808
+05:54.231 --> 05:58.358
 a renovação já foi protocolada, e a
 nova certidão chega em poucos dias.
 
-06:03.442 --> 06:06.240
+05:58.992 --> 06:01.790
 O campo Dispensado até define
 a validade da exceção:
 
-06:06.374 --> 06:09.422
+06:01.924 --> 06:04.972
 depois dessa data, o alerta
 volta a aparecer sozinho.
 
-06:10.056 --> 06:11.808
+06:05.606 --> 06:07.358
 Confirme em Dispensar alerta.
 
-06:12.442 --> 06:15.763
+06:07.992 --> 06:11.313
 O alerta sai da lista principal
 e vai para o filtro Dispensados,
 
-06:15.851 --> 06:17.672
+06:11.401 --> 06:13.222
 sempre com a justificativa à vista.
 
-06:18.306 --> 06:18.945
+06:13.856 --> 06:14.495
 Dica:
 
-06:18.965 --> 06:20.706
+06:14.515 --> 06:16.256
 use a dispensa com moderação.
 
-06:21.340 --> 06:23.536
+06:16.890 --> 06:19.086
 Exceção sem prazo vira ponto cego.
 
-06:25.395 --> 06:30.239
+06:20.345 --> 06:25.189
 Descendo, estão os indicadores do Balanced
 Scorecard, em quatro perspectivas.
 
-06:30.868 --> 06:33.825
+06:25.818 --> 06:28.775
 Financeira, com margem, retorno e caixa.
 
-06:34.459 --> 06:37.109
+06:29.409 --> 06:32.059
 Clientes, que aqui são os órgãos públicos.
 
-06:37.743 --> 06:41.007
+06:32.693 --> 06:35.957
 Processos internos, com
 custo, perdas e estoque.
 
-06:41.641 --> 06:43.314
+06:36.591 --> 06:38.264
 E Aprendizado e crescimento.
 
-06:43.948 --> 06:47.609
+06:38.898 --> 06:42.559
 Em cada linha, você vê o
 realizado, a meta, o status,
 
-06:47.686 --> 06:51.643
+06:42.636 --> 06:46.593
 a variação em relação à comparação
 escolhida e a tendência de doze meses.
 
-06:52.277 --> 06:56.530
+06:47.227 --> 06:51.480
 Alguns indicadores vêm pareados com outro,
 para evitar decisões de um lado só.
 
-06:57.164 --> 07:01.495
+06:52.114 --> 06:56.445
 A margem de contribuição, por exemplo,
 aparece ao lado das entregas no prazo:
 
-07:01.607 --> 07:04.132
+06:56.557 --> 06:59.082
 margem boa com entrega
 atrasada não é sucesso.
 
-07:04.766 --> 07:09.268
+06:59.716 --> 07:04.218
 Em Processos internos, a variação de custo
 real contra o padrão está fora da meta.
 
-07:09.902 --> 07:11.200
+07:04.852 --> 07:06.150
 Guarde essa informação:
 
-07:11.345 --> 07:13.643
+07:06.295 --> 07:08.593
 vamos encontrar a causa
 em Custos e produção.
 
-07:15.495 --> 07:18.577
+07:09.845 --> 07:12.927
 Para confiar num número, é
 preciso saber de onde ele vem.
 
-07:19.207 --> 07:21.050
+07:13.557 --> 07:15.400
 Clique no nome de qualquer indicador.
 
-07:21.684 --> 07:25.323
+07:16.034 --> 07:19.673
 A janela Como é calculado mostra
 a fórmula, a fonte dos dados,
 
-07:25.411 --> 07:29.528
+07:19.761 --> 07:23.878
 a data de atualização, o responsável,
 se o indicador é controlável por ele
 
-07:29.548 --> 07:31.664
+07:23.898 --> 07:26.014
 e a tendência dos últimos doze meses.
 
-07:32.298 --> 07:35.857
+07:26.648 --> 07:30.207
 Use esta janela nas reuniões, quando
 alguém questionar um resultado.
 
-07:36.491 --> 07:38.289
+07:30.841 --> 07:32.639
 Para sair, feche a janela.
 
-07:40.129 --> 07:42.415
+07:34.479 --> 07:36.765
 No fim do Painel está a ponte de margem.
 
-07:43.045 --> 07:47.536
+07:37.395 --> 07:41.886
 Ela explica, em cascata, como a margem de
 contribuição foi do mês anterior para o
 
-07:47.556 --> 07:48.556
+07:41.906 --> 07:42.906
 atual.
 
-07:48.738 --> 07:50.036
+07:43.088 --> 07:44.386
 Cada barra é um efeito:
 
-07:50.124 --> 07:53.627
+07:44.474 --> 07:47.977
 preço de venda, volume, custo
 de insumos e eficiência.
 
-07:54.261 --> 07:57.536
+07:48.611 --> 07:51.886
 O texto abaixo resume o resultado
 e diz de quem é cada efeito.
 
-07:58.170 --> 08:00.297
+07:52.520 --> 07:54.647
 Preço e volume são da área comercial.
 
-08:00.931 --> 08:04.127
+07:55.281 --> 07:58.477
 Custo de insumos é de Compras,
 que controla só em parte.
 
-08:04.761 --> 08:06.354
+07:59.111 --> 08:00.704
 Eficiência é da Produção.
 
-08:06.988 --> 08:11.411
+08:01.338 --> 08:05.761
 Assim, a conversa sobre margem sai do
 achismo e vai direto ao responsável.
 
-08:12.045 --> 08:13.433
+08:06.395 --> 08:07.783
 Recapitulando o Painel:
 
-08:13.556 --> 08:17.820
+08:07.906 --> 08:12.170
 resumo do mês, desvios com ação,
 indicadores e ponte de margem.
 
-08:19.662 --> 08:23.187
+08:13.412 --> 08:16.937
 Agora, vamos aos Cadastros,
 a base de todos os cálculos.
 
-08:23.817 --> 08:25.523
+08:17.567 --> 08:19.273
 A tela é dividida em abas.
 
-08:26.158 --> 08:29.239
+08:19.908 --> 08:22.989
 A primeira, Empresa, guarda
 os parâmetros gerais.
 
-08:29.873 --> 08:33.763
+08:23.623 --> 08:27.513
 A competência atual é o último mês
 fechado, e define o padrão do painel
 
-08:33.783 --> 08:34.783
+08:27.533 --> 08:28.533
 e dos alertas.
 
-08:35.328 --> 08:39.228
+08:29.078 --> 08:32.978
 A alíquota efetiva e o custo de
 capital alimentam o NOPAT e o EVA.
 
-08:39.862 --> 08:43.171
+08:33.612 --> 08:36.921
 Se ficarem em branco, esses
 indicadores aparecem sem dados,
 
-08:43.237 --> 08:44.762
+08:36.987 --> 08:38.512
 em vez de um número inventado.
 
-08:45.396 --> 08:49.660
+08:39.146 --> 08:43.410
 O saldo inicial de caixa e a data dele são
 o ponto de partida da projeção de caixa.
 
-08:50.294 --> 08:53.614
+08:44.044 --> 08:47.364
 Sempre que mudar algo aqui, clique
 em Salvar dados da empresa.
 
-08:54.248 --> 08:55.206
+08:47.998 --> 08:48.956
 Erro comum:
 
-08:55.226 --> 08:58.319
+08:48.976 --> 08:52.069
 esquecer de avançar a competência
 atual depois do fechamento.
 
-08:58.953 --> 09:01.433
+08:52.703 --> 08:55.183
 Aí o painel continua
 mostrando o mês velho.
 
-09:03.262 --> 09:06.923
+08:56.412 --> 09:00.073
 Em Centros de responsabilidade, cada
 área responde pelo que controla:
 
-09:07.046 --> 09:09.901
+09:00.196 --> 09:03.051
 custo, receita, resultado ou investimento.
 
-09:10.530 --> 09:13.828
+09:03.680 --> 09:06.978
 São esses responsáveis que
 aparecem sugeridos nos alertas.
 
-09:14.462 --> 09:17.498
+09:07.612 --> 09:10.648
 Todas as listas do sistema
 funcionam do mesmo jeito.
 
-09:18.133 --> 09:20.283
+09:11.283 --> 09:13.433
 Clique no título de uma
 coluna para ordenar.
 
-09:20.917 --> 09:23.930
+09:14.067 --> 09:17.080
 Use Exportar CSV para levar
 a lista para a planilha.
 
-09:24.564 --> 09:27.021
+09:17.714 --> 09:20.171
 E use Editar ou Excluir, em cada linha.
 
-09:27.655 --> 09:29.794
+09:20.805 --> 09:22.944
 A exclusão sempre pede confirmação.
 
-09:31.629 --> 09:36.347
+09:24.179 --> 09:28.897
 Em Insumos, ficam a unidade, o preço
 padrão, a validade e o estoque mínimo.
 
-09:36.976 --> 09:41.331
+09:29.526 --> 09:33.881
 O preço padrão é a régua da variação de
 preço, que é responsabilidade de Compras.
 
-09:41.965 --> 09:43.945
+09:34.515 --> 09:36.495
 Veja a variação em relação ao padrão:
 
-09:44.079 --> 09:46.047
+09:36.629 --> 09:38.597
 o leite em pó já está bem mais caro.
 
-09:46.681 --> 09:51.138
+09:39.231 --> 09:43.688
 Em Produtos e fichas técnicas, o sistema
 calcula o custo padrão de cada produto.
 
-09:51.772 --> 09:53.092
+09:44.322 --> 09:45.642
 A fórmula está no topo:
 
-09:53.272 --> 09:56.354
+09:45.822 --> 09:48.904
 os materiais da ficha, divididos
 pelo rendimento padrão,
 
-09:56.420 --> 09:58.695
+09:48.970 --> 09:51.245
 mais a mão de obra direta e o CIF padrão.
 
-09:59.329 --> 10:01.990
+09:51.879 --> 09:54.540
 Abrindo um produto, você
 vê a ficha técnica:
 
-10:02.033 --> 10:04.479
+09:54.583 --> 09:57.029
 cada insumo e a quantidade
 padrão por unidade.
 
-10:05.113 --> 10:06.854
+09:57.663 --> 09:59.404
 Vou fechar sem alterar nada.
 
-10:08.962 --> 10:13.090
+10:01.179 --> 10:05.306
 Em Órgãos públicos, compare o prazo de
 pagamento do contrato com o prazo médio
 
-10:13.110 --> 10:16.305
+10:05.326 --> 10:08.522
 real, calculado a partir
 dos pagamentos registrados.
 
-10:16.935 --> 10:21.130
+10:09.151 --> 10:13.347
 A Prefeitura de Bom Retiro do Norte
 paga, em média, em sessenta dias:
 
-10:21.253 --> 10:22.585
+10:13.470 --> 10:14.801
 o dobro do contratado.
 
-10:23.219 --> 10:26.039
+10:15.436 --> 10:18.256
 É esse prazo real que entra
 na projeção de caixa.
 
-10:26.673 --> 10:30.142
+10:18.890 --> 10:22.358
 Em Documentos de habilitação,
 ficam as certidões e os alvarás,
 
-10:30.230 --> 10:31.721
+10:22.447 --> 10:23.938
 com a situação de cada um.
 
-10:32.355 --> 10:35.017
+10:24.572 --> 10:27.233
 O sistema avisa quinze
 dias antes do vencimento,
 
-10:35.139 --> 10:38.914
+10:27.356 --> 10:31.131
 porque documento vencido pode inabilitar
 a empresa ou reter pagamentos.
 
-10:39.548 --> 10:44.130
+10:31.765 --> 10:36.347
 Por fim, em Alçadas de aprovação, você
 define limites por tipo de operação.
 
-10:44.764 --> 10:48.676
+10:36.981 --> 10:40.892
 Acima do limite, o sistema exige
 registrar quem aprovou e por quê.
 
-10:49.310 --> 10:50.074
+10:41.526 --> 10:42.291
 Resumindo:
 
-10:50.094 --> 10:52.358
+10:42.311 --> 10:44.574
 cadastro bem feito é cálculo confiável.
 
-10:54.195 --> 10:58.289
+10:45.812 --> 10:49.905
 Vamos a Custos e produção, onde está a
 causa daquele custo acima do padrão.
 
-10:58.918 --> 11:01.034
+10:50.535 --> 10:52.651
 A tela também trabalha por competência.
 
-11:01.668 --> 11:05.864
+10:53.285 --> 10:57.480
 No resumo, a produção do mês em
 quilos, o custo real contra o padrão,
 
-11:06.043 --> 11:08.284
+10:57.660 --> 10:59.901
 e a variação separada em duas partes.
 
-11:08.918 --> 11:12.591
+11:00.535 --> 11:04.208
 A variação de preço é de Compras,
 e só é parcialmente controlável.
 
-11:13.225 --> 11:18.136
+11:04.842 --> 11:09.753
 A variação de quantidade, ou de eficiência,
 é da Produção, que controla o consumo.
 
-11:18.770 --> 11:20.182
+11:10.387 --> 11:11.798
 Aqui, fica claro:
 
-11:20.282 --> 11:23.477
+11:11.898 --> 11:15.094
 a maior parte do desvio de setembro
 veio do preço dos insumos,
 
-11:23.589 --> 11:24.932
+11:15.205 --> 11:16.548
 e não do chão de fábrica.
 
-11:27.029 --> 11:30.929
+11:18.379 --> 11:22.279
 A tabela Custo padrão contra real por
 produto mostra, para cada produto,
 
-11:31.063 --> 11:33.827
+11:22.413 --> 11:25.177
 o custo padrão e o real
 por unidade, a variação,
 
-11:33.972 --> 11:35.804
+11:25.322 --> 11:27.154
 e quanto dela é preço ou quantidade.
 
-11:36.433 --> 11:40.345
+11:27.783 --> 11:31.695
 O achocolatado e a mistura para mingau
 são os que mais se afastaram do padrão.
 
-11:40.979 --> 11:44.288
+11:32.329 --> 11:35.638
 Na análise de variações por
 insumo, a resposta aparece:
 
-11:44.354 --> 11:48.231
+11:35.704 --> 11:39.581
 o leite em pó foi comprado cerca de vinte
 e quatro por cento acima do preço padrão,
 
-11:48.399 --> 11:50.038
+11:39.749 --> 11:41.388
 e ele está nos dois produtos.
 
-11:50.672 --> 11:52.833
+11:42.022 --> 11:44.183
 As fórmulas ficam sempre visíveis.
 
-11:53.467 --> 11:57.504
+11:44.817 --> 11:48.854
 A diferença de preço, vezes a
 quantidade real, vai para Compras.
 
-11:58.138 --> 12:02.049
+11:49.488 --> 11:53.399
 O excesso de quantidade, vezes o
 preço padrão, vai para a Produção.
 
-12:03.895 --> 12:08.080
+11:54.645 --> 11:58.830
 Em Perdas por motivo, o índice compara
 o valor perdido com o valor consumido.
 
-12:08.709 --> 12:11.791
+11:59.459 --> 12:02.541
 Em setembro, as perdas de
 processo passaram da meta.
 
-12:12.425 --> 12:15.007
+12:03.175 --> 12:05.757
 Mais abaixo, estão os
 lotes da competência.
 
-12:15.641 --> 12:20.018
+12:06.391 --> 12:10.768
 Cada lote mostra o produzido, o
 percentual do planejado, o custo real,
 
-12:20.175 --> 12:22.905
+12:10.925 --> 12:13.655
 o rendimento, as perdas e o CIF rateado.
 
-12:23.539 --> 12:27.189
+12:14.289 --> 12:17.939
 O CIF do mês é distribuído pelo
 critério escolhido em Configurações;
 
-12:27.266 --> 12:29.007
+12:18.016 --> 12:19.757
 aqui, por horas de produção.
 
-12:29.641 --> 12:31.689
+12:20.391 --> 12:22.439
 Veja este lote de mistura para mingau:
 
-12:31.857 --> 12:33.973
+12:22.607 --> 12:24.723
 o rendimento ficou bem abaixo da meta.
 
-12:34.607 --> 12:37.927
+12:25.357 --> 12:28.677
 Foi ele que gerou o alerta de
 rendimento na Central de desvios.
 
-12:39.762 --> 12:43.719
+12:29.912 --> 12:33.869
 O gráfico Evolução em 12 meses junta
 o rendimento, o índice de perdas
 
-12:43.739 --> 12:45.980
+12:33.889 --> 12:36.130
 e a variação do custo
 real contra o padrão.
 
-12:46.610 --> 12:48.646
+12:36.760 --> 12:38.796
 Ele responde a uma pergunta importante:
 
-12:48.723 --> 12:51.067
+12:38.873 --> 12:41.217
 o desvio é pontual, ou vem crescendo?
 
-12:51.701 --> 12:55.862
+12:41.851 --> 12:46.012
 Aqui, a variação de custo sobe mês
 a mês desde outubro do ano passado,
 
-12:55.962 --> 12:57.817
+12:46.112 --> 12:47.967
 acompanhando a alta do leite em pó.
 
-12:58.451 --> 12:59.056
+12:48.601 --> 12:49.206
 Dica:
 
-12:59.076 --> 13:02.271
+12:49.226 --> 12:52.421
 quando o desvio é persistente,
 não basta cobrar a fábrica.
 
-13:02.905 --> 13:07.101
+12:53.055 --> 12:57.251
 É hora de rever o preço padrão, e de
 olhar os contratos que usam esse insumo.
 
-13:08.929 --> 13:11.567
+12:58.479 --> 13:01.117
 Para lançar a produção,
 use Registrar lote.
 
-13:12.197 --> 13:17.029
+13:01.747 --> 13:06.579
 Informe o produto, o código do lote,
 a data, as quantidades e as horas.
 
-13:17.663 --> 13:21.733
+13:07.213 --> 13:11.283
 Ao escolher o produto, os insumos da
 ficha técnica entram automaticamente,
 
-13:21.788 --> 13:22.881
+13:11.338 --> 13:12.431
 com o preço padrão.
 
-13:23.515 --> 13:26.120
+13:13.065 --> 13:15.670
 Você só ajusta a quantidade
 e o preço reais.
 
-13:26.754 --> 13:29.029
+13:16.304 --> 13:18.579
 Depois, vêm as perdas por motivo.
 
-13:29.663 --> 13:32.904
+13:19.213 --> 13:22.454
 E esta opção baixa os insumos
 do estoque pela regra FEFO,
 
-13:33.049 --> 13:34.938
+13:22.599 --> 13:24.488
 e já dá entrada no produto acabado.
 
-13:35.572 --> 13:38.654
+13:25.122 --> 13:28.204
 Como é só uma demonstração,
 vou fechar sem salvar.
 
-13:39.288 --> 13:40.995
+13:28.838 --> 13:30.545
 Resumindo Custos e produção:
 
-13:41.163 --> 13:43.881
+13:30.713 --> 13:33.431
 o sistema mostra quem
 causou cada real de desvio.
 
-13:45.729 --> 13:46.776
+13:34.679 --> 13:35.726
 Próxima parada:
 
-13:46.888 --> 13:48.038
+13:35.838 --> 13:36.988
 Estoque e perdas.
 
-13:48.667 --> 13:49.272
+13:37.617 --> 13:38.222
 Lembre:
 
-13:49.292 --> 13:51.533
+13:38.242 --> 13:40.483
 estoque parado é capital de giro parado.
 
-13:52.167 --> 13:55.238
+13:41.117 --> 13:44.188
 O resumo mostra o valor em
 insumos e em produtos acabados,
 
-13:55.383 --> 13:59.227
+13:44.333 --> 13:48.177
 os itens abaixo do mínimo, os lotes
 vencendo e o giro de estoque.
 
-13:59.861 --> 14:04.284
+13:48.811 --> 13:53.234
 Na tabela Saldos por item, a cobertura em
 dias divide o saldo pelo consumo médio
 
-14:04.304 --> 14:06.772
+13:53.254 --> 13:55.722
 diário das saídas dos
 últimos noventa dias.
 
-14:07.406 --> 14:11.658
+13:56.356 --> 14:00.608
 O cacau em pó está abaixo do mínimo,
 com cerca de doze dias de cobertura.
 
-14:12.292 --> 14:15.306
+14:01.242 --> 14:04.256
 É hora de comprar, antes que
 falte para o achocolatado.
 
-14:17.129 --> 14:21.438
+14:05.479 --> 14:09.788
 Na aba FEFO e vencimentos, os lotes aparecem
 na ordem em que devem ser consumidos
 
-14:21.458 --> 14:22.393
+14:09.808 --> 14:10.743
 e expedidos:
 
-14:22.413 --> 14:23.892
+14:10.763 --> 14:12.242
 primeiro o que vence primeiro.
 
-14:24.522 --> 14:28.036
+14:12.872 --> 14:16.386
 O primeiro da lista é um lote de
 leite em pó que vence em quatro dias.
 
-14:28.670 --> 14:30.308
+14:17.020 --> 14:18.658
 Use-o já na próxima produção.
 
-14:30.942 --> 14:34.751
+14:19.292 --> 14:23.101
 Você pode filtrar para ver só
 insumos, ou só produtos acabados.
 
-14:35.386 --> 14:35.991
+14:23.736 --> 14:24.341
 Dica:
 
-14:36.011 --> 14:40.740
+14:24.361 --> 14:29.090
 exporte esta lista em CSV para a equipe do
 almoxarifado, no começo de cada semana.
 
-14:42.595 --> 14:47.984
+14:30.345 --> 14:35.734
 Em Movimentos, ficam todas as entradas,
 saídas, perdas e ajustes, com lote,
 
-14:48.107 --> 14:49.314
+14:35.857 --> 14:37.064
 validade e documento.
 
-14:49.943 --> 14:52.150
+14:37.693 --> 14:39.900
 Você pode filtrar por item ou por tipo.
 
-14:52.784 --> 14:55.127
+14:40.534 --> 14:42.877
 Para lançar, use Registrar movimento.
 
-14:55.761 --> 14:59.355
+14:43.511 --> 14:47.105
 Ajustes e perdas acima da alçada
 exigem a aprovação registrada.
 
-14:59.989 --> 15:04.582
+14:47.739 --> 14:52.332
 Na aba Perdas, o gráfico mostra as perdas
 dos últimos doze meses por motivo:
 
-15:04.682 --> 15:07.605
+14:52.432 --> 14:55.355
 processo, validade, avaria e qualidade.
 
-15:08.239 --> 15:09.366
+14:55.989 --> 14:57.116
 Resumindo Estoque:
 
-15:09.432 --> 15:12.684
+14:57.182 --> 15:00.434
 cobertura, validade e
 perdas, sempre em reais.
 
-15:14.529 --> 15:16.804
+15:01.679 --> 15:03.954
 Veja como funciona a alçada na prática.
 
-15:17.433 --> 15:19.038
+15:04.583 --> 15:06.188
 Clique em Registrar movimento.
 
-15:19.672 --> 15:22.095
+15:06.822 --> 15:09.245
 Vou lançar um ajuste de
 inventário no açúcar.
 
-15:22.729 --> 15:25.776
+15:09.879 --> 15:12.926
 No ajuste, a quantidade
 negativa reduz o saldo.
 
-15:26.411 --> 15:28.061
+15:13.561 --> 15:15.211
 O valor também vai negativo:
 
-15:28.138 --> 15:29.299
+15:15.288 --> 15:16.449
 seis mil reais.
 
-15:29.933 --> 15:32.458
+15:17.083 --> 15:19.608
 O motivo é obrigatório
 em perdas e ajustes,
 
-15:32.524 --> 15:34.890
+15:19.674 --> 15:22.040
 para que a auditoria entenda
 o lançamento depois.
 
-15:35.524 --> 15:38.083
+15:22.674 --> 15:25.233
 Ao salvar, o sistema confere a alçada.
 
-15:38.717 --> 15:42.629
+15:25.867 --> 15:29.779
 Seis mil reais passa do limite de cinco
 mil definido para ajuste de estoque,
 
-15:42.740 --> 15:44.913
+15:29.890 --> 15:32.063
 então ele pede o registro da aprovação.
 
-15:45.547 --> 15:46.936
+15:32.697 --> 15:34.086
 Informe quem aprovou.
 
-15:47.570 --> 15:51.617
+15:34.720 --> 15:38.767
 Depois, escreva a justificativa
 da aprovação, em poucas palavras.
 
-15:52.251 --> 15:53.970
+15:39.401 --> 15:41.120
 Confirme em Registrar aprovação:
 
-15:54.104 --> 15:55.879
+15:41.254 --> 15:43.029
 só então o movimento é gravado.
 
-15:56.513 --> 16:00.401
+15:43.663 --> 15:47.551
 Esse é um controle interno simples,
 que evita ajustes grandes sem dono.
 
-16:02.229 --> 16:04.481
+15:48.779 --> 15:51.031
 Agora, o diferencial do sistema:
 
-16:04.570 --> 16:05.867
+15:51.120 --> 15:52.417
 Contratos públicos.
 
-16:06.497 --> 16:09.976
+15:53.047 --> 15:56.526
 O resumo traz os contratos e atas
 vigentes e o valor ainda a faturar,
 
-16:10.111 --> 16:11.806
+15:56.661 --> 15:58.356
 a margem prevista contra a atual,
 
-16:11.917 --> 16:15.567
+15:58.467 --> 16:02.117
 quantos contratos têm defasagem de
 custo de pelo menos cinco por cento,
 
-16:15.679 --> 16:18.170
+16:02.229 --> 16:04.720
 os recebíveis vencidos
 e as entregas no prazo.
 
-16:18.804 --> 16:22.988
+16:05.354 --> 16:09.538
 Na tabela, cada contrato mostra quanto
 do valor registrado já foi consumido,
 
-16:23.008 --> 16:27.295
+16:09.558 --> 16:13.845
 a margem prevista, a margem atual
 e a erosão, em pontos percentuais.
 
-16:27.929 --> 16:31.966
+16:14.479 --> 16:18.516
 A Ata 012/2025 consumiu quase
 todo o valor registrado
 
-16:31.986 --> 16:34.238
+16:18.536 --> 16:20.788
 e perdeu mais de treze pontos de margem.
 
-16:34.872 --> 16:35.872
+16:21.422 --> 16:22.422
 Vamos abri-la.
 
-16:37.662 --> 16:39.937
+16:23.679 --> 16:25.954
 O detalhe do contrato começa pelo resumo:
 
-16:40.094 --> 16:45.153
+16:26.111 --> 16:31.170
 vigência, margem, saldo da ata, resultado
 de contribuição, entregas no prazo,
 
-16:45.298 --> 16:46.517
+16:31.315 --> 16:32.533
 e glosas e multas.
 
-16:47.146 --> 16:50.410
+16:33.163 --> 16:36.426
 A vigência termina em cinquenta
 dias, e o saldo está no fim.
 
-16:51.044 --> 16:54.239
+16:37.061 --> 16:40.256
 É hora de preparar a renovação,
 ou uma nova licitação.
 
-16:54.873 --> 16:58.319
+16:40.890 --> 16:44.336
 Em Desvios deste contrato,
 aparecem só os alertas desta ata,
 
-16:58.373 --> 17:00.319
+16:44.390 --> 16:46.336
 cada um com o botão Registrar ação.
 
-17:00.953 --> 17:05.489
+16:46.970 --> 16:51.506
 Em Dados do contrato, ficam o tipo, a
 assinatura, a data-base da proposta,
 
-17:05.578 --> 17:07.523
+16:51.595 --> 16:53.540
 o índice de reajuste e a garantia.
 
-17:08.158 --> 17:10.330
+16:54.174 --> 16:56.347
 A data-base já completou doze meses:
 
-17:10.453 --> 17:12.171
+16:56.470 --> 16:58.188
 o reajuste pode ser avaliado.
 
-17:14.029 --> 17:19.383
+16:59.445 --> 17:04.800
 Na tabela de itens, para cada produto,
 aparecem o registrado, o empenhado, o saldo,
 
-17:19.449 --> 17:23.122
+17:04.866 --> 17:08.539
 o preço, o custo da proposta,
 o custo atual e a margem.
 
-17:23.751 --> 17:26.220
+17:09.168 --> 17:11.636
 A coluna Esgota em estima
 quando o saldo acaba,
 
-17:26.308 --> 17:28.879
+17:11.725 --> 17:14.295
 pelo ritmo de empenho dos
 últimos noventa dias.
 
-17:29.513 --> 17:33.151
+17:14.930 --> 17:18.568
 O bloco Avaliar pedido de reequilíbrio
 ou reajuste reúne a evidência:
 
-17:33.320 --> 17:37.992
+17:18.736 --> 17:23.409
 o custo considerado na proposta, o custo
 atual, com os lotes usados no cálculo,
 
-17:38.070 --> 17:39.070
+17:23.486 --> 17:24.486
 e a defasagem.
 
-17:39.683 --> 17:43.583
+17:25.100 --> 17:29.000
 O sistema também separa a parte da
 defasagem que vem de ineficiência interna,
 
-17:43.672 --> 17:46.242
+17:29.089 --> 17:31.659
 porque essa parte não
 justifica um pedido ao órgão.
 
-17:46.876 --> 17:47.981
+17:32.293 --> 17:33.398
 E, de novo:
 
-17:48.092 --> 17:49.686
+17:33.509 --> 17:35.102
 a validação é do jurídico.
 
-17:51.529 --> 17:54.486
+17:36.345 --> 17:39.302
 Em Empenhos, entregas,
 liquidação e pagamento,
 
-17:54.608 --> 17:57.122
+17:39.425 --> 17:41.939
 você acompanha o ciclo
 completo de cada empenho.
 
-17:57.751 --> 18:01.617
+17:42.568 --> 17:46.434
 Este empenho de setembro foi liquidado,
 mas o pagamento ainda não chegou.
 
-18:02.251 --> 18:04.776
+17:47.068 --> 17:49.593
 Quando o órgão pagar,
 abra o empenho em Editar.
 
-18:05.411 --> 18:07.470
+17:50.227 --> 17:52.286
 Desça até Pagamento e informe a data.
 
-18:08.104 --> 18:11.504
+17:52.920 --> 17:56.320
 Se o valor ficar em branco, o
 sistema usa o valor liquidado.
 
-18:12.138 --> 18:16.015
+17:56.955 --> 18:00.832
 Ao salvar, o sistema registra
 automaticamente o recebimento no caixa.
 
-18:16.649 --> 18:18.572
+18:01.466 --> 18:03.389
 A situação do empenho muda na hora.
 
-18:19.206 --> 18:22.515
+18:04.023 --> 18:07.332
 Se houver glosa na liquidação,
 informe o valor glosado:
 
-18:22.604 --> 18:25.583
+18:07.420 --> 18:10.400
 ele entra no indicador de glosas
 e no resultado do contrato.
 
-18:27.429 --> 18:28.931
+18:11.645 --> 18:13.148
 Vamos olhar outro contrato:
 
-18:28.986 --> 18:33.454
+18:13.202 --> 18:17.670
 a Ata 003/2025, da Prefeitura
 de Bom Retiro do Norte.
 
-18:34.083 --> 18:37.915
+18:18.300 --> 18:22.132
 O bloco Resultado de contribuição do
 contrato parte da receita entregue,
 
-18:38.117 --> 18:42.188
+18:22.334 --> 18:26.405
 e desconta o custo variável, o
 frete, as multas e as glosas.
 
-18:42.822 --> 18:46.608
+18:27.039 --> 18:30.825
 Aqui, uma multa por atraso na entrega
 de junho reduziu o resultado.
 
-18:47.242 --> 18:50.699
+18:31.459 --> 18:34.916
 As penalidades ficam registradas
 com data, motivo e valor.
 
-18:51.333 --> 18:51.938
+18:35.550 --> 18:36.155
 Dica:
 
-18:51.958 --> 18:54.324
+18:36.175 --> 18:38.541
 multas e glosas são
 custo real do contrato.
 
-18:54.958 --> 18:57.392
+18:39.175 --> 18:41.609
 Use este resultado, e não só o preço,
 
-18:57.458 --> 19:00.892
+18:41.675 --> 18:45.109
 para decidir se vale participar
 da próxima licitação deste órgão.
 
-19:02.729 --> 19:06.572
+18:46.345 --> 18:50.189
 Agora, na lista de contratos,
 abra a aba Órgãos e recebíveis.
 
-19:07.201 --> 19:11.772
+18:50.818 --> 18:55.389
 Para cada órgão, você vê o prazo
 contratual, o prazo real desde a liquidação
 
-19:11.792 --> 19:13.931
+18:55.409 --> 18:57.548
 e desde a entrega, e o atraso médio.
 
-19:14.565 --> 19:19.079
+18:58.182 --> 19:02.695
 A Secretaria Estadual de Educação paga,
 em média, onze dias depois do prazo.
 
-19:19.713 --> 19:23.488
+19:03.330 --> 19:07.105
 O gráfico de concentração mostra quanto
 da receita depende de cada órgão.
 
-19:24.122 --> 19:25.692
+19:07.739 --> 19:09.309
 Concentração alta é risco:
 
-19:25.781 --> 19:27.863
+19:09.398 --> 19:11.480
 um atraso grande afeta o caixa inteiro.
 
-19:28.497 --> 19:32.511
+19:12.114 --> 19:16.128
 E a lista Recebíveis em aberto mostra,
 empenho a empenho, o que foi faturado
 
-19:32.531 --> 19:34.999
+19:16.148 --> 19:18.616
 e ainda não foi pago,
 com os dias de atraso.
 
-19:35.633 --> 19:37.261
+19:19.250 --> 19:20.877
 É a sua lista de cobrança.
 
-19:37.895 --> 19:39.624
+19:21.511 --> 19:23.241
 Resumindo Contratos públicos:
 
-19:39.690 --> 19:43.545
+19:23.307 --> 19:27.161
 margem, saldo, prazo e
 recebimento, contrato a contrato.
 
-19:45.395 --> 19:48.898
+19:28.412 --> 19:31.915
 Para cadastrar um contrato ou uma
 ata, volte à aba Contratos e atas
 
-19:48.918 --> 19:50.545
+19:31.935 --> 19:33.562
 e clique em Cadastrar contrato.
 
-19:51.175 --> 19:52.620
+19:34.192 --> 19:35.637
 Preencha a identificação:
 
-19:52.720 --> 19:55.836
+19:35.737 --> 19:38.853
 número, tipo, órgão,
 processo e modalidade.
 
-19:56.470 --> 19:58.041
+19:39.487 --> 19:41.058
 Depois, as datas:
 
-19:58.061 --> 20:00.859
+19:41.078 --> 19:43.876
 assinatura, vigência e
 data-base da proposta.
 
-20:01.493 --> 20:05.723
+19:44.510 --> 19:48.739
 Doze meses depois da data-base, o
 sistema avisa para avaliar o reajuste.
 
-20:06.357 --> 20:10.030
+19:49.373 --> 19:53.047
 Nos itens, informe a quantidade
 registrada, o preço contratado
 
-20:10.050 --> 20:11.291
+19:53.067 --> 19:54.308
 e o custo da proposta.
 
-20:11.925 --> 20:12.825
+19:54.942 --> 19:55.842
 Atenção:
 
-20:12.845 --> 20:16.620
+19:55.862 --> 19:59.637
 o custo da proposta é o custo unitário
 que você considerou ao formar o preço.
 
-20:17.255 --> 20:20.745
+20:00.271 --> 20:03.762
 Ele é a base de toda a análise de
 defasagem e de erosão de margem.
 
-20:21.380 --> 20:25.132
+20:04.396 --> 20:08.148
 Por isso, guarde a planilha de
 formação de preço de cada licitação.
 
-20:25.766 --> 20:27.223
+20:08.783 --> 20:10.239
 Vou fechar sem salvar.
 
-20:29.495 --> 20:30.986
+20:12.445 --> 20:13.936
 Agora, o Orçamento.
 
-20:31.616 --> 20:34.255
+20:14.566 --> 20:17.205
 O resumo compara o resultado
 orçado com o realizado,
 
-20:34.423 --> 20:37.414
+20:17.373 --> 20:20.364
 e conta as linhas desfavoráveis
 acima de dez por cento.
 
-20:38.048 --> 20:41.936
+20:20.998 --> 20:24.886
 Na tabela Orçado contra realizado,
 cada linha é um centro e uma conta.
 
-20:42.570 --> 20:44.925
+20:25.520 --> 20:27.875
 O realizado segue o regime de competência:
 
-20:45.048 --> 20:47.209
+20:27.998 --> 20:30.159
 lançamentos pagos e a pagar do mês.
 
-20:47.843 --> 20:50.936
+20:30.793 --> 20:33.886
 A receita de contratos vem
 do faturamento das entregas.
 
-20:51.570 --> 20:55.561
+20:34.520 --> 20:38.511
 A Manutenção da Produção gastou quase
 sessenta por cento acima do orçado.
 
-20:56.195 --> 20:59.368
+20:39.145 --> 20:42.318
 Por isso, ela aparece como
 crítica na Central de desvios.
 
-21:01.229 --> 21:02.992
+20:43.579 --> 20:45.342
 Clique em Orçamento flexível.
 
-21:03.622 --> 21:07.692
+20:45.972 --> 20:50.042
 Nele, a parte variável de cada linha
 é ajustada ao volume real produzido.
 
-21:08.326 --> 21:11.431
+20:50.676 --> 20:53.781
 O cartão Volume real contra
 orçado mostra essa relação,
 
-21:11.576 --> 21:14.147
+20:53.926 --> 20:56.497
 e o volume orçado é
 alterado em Editar volume.
 
-21:14.781 --> 21:18.647
+20:57.131 --> 21:00.997
 Assim, um custo de insumos maior,
 só porque se produziu mais,
 
-21:18.713 --> 21:20.340
+21:01.063 --> 21:02.690
 não é tratado como desvio.
 
-21:20.974 --> 21:23.351
+21:03.324 --> 21:05.701
 Sobra apenas o que é preço ou eficiência.
 
-21:23.986 --> 21:27.408
+21:06.336 --> 21:09.758
 Volte ao orçamento fixo quando quiser
 comparar com o número aprovado.
 
-21:29.262 --> 21:31.923
+21:11.012 --> 21:13.673
 Para incluir uma linha,
 clique em Lançar orçamento.
 
-21:32.553 --> 21:36.112
+21:14.303 --> 21:17.862
 Escolha a competência, o centro
 de responsabilidade e a natureza:
 
-21:36.212 --> 21:38.135
+21:17.962 --> 21:19.885
 receita, ou custo e despesa.
 
-21:38.769 --> 21:40.294
+21:20.519 --> 21:22.044
 Informe a conta e o valor.
 
-21:40.928 --> 21:43.226
+21:22.678 --> 21:24.976
 E a parte variável, em percentual.
 
-21:43.860 --> 21:46.771
+21:25.610 --> 21:28.521
 É ela que o orçamento
 flexível ajusta pelo volume.
 
-21:47.405 --> 21:51.033
+21:29.155 --> 21:32.783
 Um custo de insumos, por
 exemplo, é quase todo variável;
 
-21:51.098 --> 21:52.317
+21:32.848 --> 21:34.067
 um aluguel é fixo.
 
-21:52.951 --> 21:53.601
+21:34.701 --> 21:35.351
 Dica:
 
-21:53.621 --> 21:56.669
+21:35.371 --> 21:38.419
 use na conta o mesmo nome da
 categoria dos lançamentos.
 
-21:57.303 --> 22:00.248
+21:39.053 --> 21:41.998
 É assim que o sistema encontra
 o realizado de cada linha.
 
-22:00.883 --> 22:02.339
+21:42.633 --> 21:44.089
 Vou fechar sem salvar.
 
-22:04.162 --> 22:06.539
+21:45.312 --> 21:47.689
 Mais abaixo, está o Forecast do ano:
 
-22:06.753 --> 22:10.244
+21:47.903 --> 21:51.394
 o realizado acumulado, mais o
 orçado dos meses restantes.
 
-22:10.873 --> 22:15.183
+21:52.023 --> 21:56.333
 As últimas colunas mostram a alternativa
 pela tendência dos últimos três meses.
 
-22:15.817 --> 22:19.796
+21:56.967 --> 22:00.946
 Se as duas projeções divergem
 muito, revise o orçamento restante.
 
-22:20.430 --> 22:24.296
+22:01.580 --> 22:05.446
 E, para não digitar o ano inteiro,
 use Copiar para outros meses,
 
-22:24.351 --> 22:26.887
+22:05.501 --> 22:08.037
 que replica uma competência
 nos meses seguintes.
 
-22:27.521 --> 22:28.388
+22:08.671 --> 22:09.538
 Resumindo:
 
-22:28.408 --> 22:31.558
+22:09.558 --> 22:12.708
 orçado, flexível e
 forecast, na mesma tela.
 
-22:33.395 --> 22:35.386
+22:13.945 --> 22:15.936
 Por último, as Configurações.
 
-22:36.016 --> 22:39.961
+22:16.566 --> 22:20.511
 Em Preferências, informe o seu nome,
 que aparece como autor no log,
 
-22:40.073 --> 22:41.836
+22:20.623 --> 22:22.386
 e o critério de rateio do CIF:
 
-22:41.914 --> 22:44.086
+22:22.464 --> 22:24.636
 horas de produção ou quilos produzidos.
 
-22:44.720 --> 22:48.802
+22:25.270 --> 22:29.352
 Em Metas e tolerâncias, cada
 indicador tem meta, faixa de atenção,
 
-22:48.914 --> 22:50.961
+22:29.464 --> 22:31.511
 faixa de fora da meta e responsável.
 
-22:51.595 --> 22:56.052
+22:32.145 --> 22:36.602
 Sem meta, o Painel mostra Sem meta,
 e nada é preenchido pelo sistema.
 
-22:56.686 --> 22:58.723
+22:37.236 --> 22:39.273
 Para mudar, clique em Editar meta.
 
-22:59.357 --> 23:01.802
+22:39.907 --> 22:42.352
 Repare no campo
 Justificativa da alteração.
 
-23:02.436 --> 23:05.484
+22:42.986 --> 22:46.034
 Ele é obrigatório, e fica
 no log com autor e data.
 
-23:06.118 --> 23:08.382
+22:46.668 --> 22:48.932
 Ninguém muda uma meta sem deixar rastro.
 
-23:09.016 --> 23:10.473
+22:49.566 --> 22:51.023
 Vou fechar sem salvar.
 
-23:12.329 --> 23:16.717
+22:52.279 --> 22:56.667
 Em Limites dos alertas, você ajusta a
 sensibilidade da Central de desvios:
 
-23:16.783 --> 23:21.672
+22:56.733 --> 23:01.622
 defasagem de custo, margem mínima do
 contrato, prazos de vigência, garantia,
 
-23:21.738 --> 23:23.831
+23:01.688 --> 23:03.781
 documentos, validade e outros.
 
-23:24.461 --> 23:27.986
+23:04.411 --> 23:07.936
 Em Backup e dados, use Exportar
 backup JSON com frequência.
 
-23:28.620 --> 23:32.611
+23:08.570 --> 23:12.561
 O arquivo contém todos os dados, e pode
 ser importado em outro computador.
 
-23:33.245 --> 23:37.758
+23:13.195 --> 23:17.708
 Apagar todos os dados volta ao modelo em
 branco, e pede uma confirmação digitada.
 
-23:38.392 --> 23:43.440
+23:18.342 --> 23:23.390
 E, no topo da tela, o bloco Banco de dados
 mostra a conexão com o banco da empresa.
 
-23:44.074 --> 23:47.508
+23:24.024 --> 23:27.458
 Com login, os dados são
 sincronizados para toda a equipe.
 
-23:48.142 --> 23:48.793
+23:28.092 --> 23:28.743
 Dica:
 
-23:48.813 --> 23:51.281
+23:28.763 --> 23:31.231
 guarde os backups num
 local seguro da empresa.
 
-23:51.915 --> 23:55.826
+23:31.865 --> 23:35.776
 Eles contêm todos os dados, então
 trate o arquivo como confidencial.
 
-23:57.662 --> 23:59.846
+23:37.012 --> 23:39.196
 Para fechar, uma rotina sugerida.
 
-24:00.476 --> 24:03.444
+23:39.826 --> 23:42.794
 Todo dia, abra o Painel e
 trate a Central de desvios:
 
-24:03.521 --> 24:06.410
+23:42.871 --> 23:45.760
 registre a ação, ou
 dispense com justificativa.
 
-24:07.044 --> 24:10.569
+23:46.394 --> 23:49.919
 Toda semana, revise os recebíveis
 em aberto, a lista FEFO
 
-24:10.589 --> 24:12.228
+23:49.939 --> 23:51.578
 e os estoques abaixo do mínimo.
 
-24:12.862 --> 24:16.898
+23:52.212 --> 23:56.248
 Todo mês, depois do fechamento,
 atualize a competência em Cadastros,
 
-24:17.033 --> 24:21.853
+23:56.383 --> 24:01.203
 analise custos e orçamento, revise a
 margem dos contratos, e exporte um backup.
 
-24:22.487 --> 24:24.694
+24:01.837 --> 24:04.044
 Assim, a pergunta estamos indo bem?
 
-24:25.328 --> 24:28.751
+24:04.678 --> 24:08.101
 passa a ter resposta, com
 número, fonte e responsável.
 
-24:30.595 --> 24:31.643
+24:09.345 --> 24:10.393
 Recapitulando:
 
-24:31.777 --> 24:33.348
+24:10.527 --> 24:12.098
 o Painel mostra onde agir.
 
-24:33.977 --> 24:36.014
+24:12.727 --> 24:14.764
 Os Cadastros sustentam os cálculos.
 
-24:36.648 --> 24:38.741
+24:15.398 --> 24:17.491
 Custos e Estoque explicam o desvio.
 
-24:39.375 --> 24:42.082
+24:18.125 --> 24:20.832
 Contratos públicos protegem
 a margem e o caixa.
 
-24:42.716 --> 24:44.764
+24:21.466 --> 24:23.514
 O Orçamento mostra o rumo do ano.
 
-24:45.398 --> 24:48.855
+24:24.148 --> 24:27.605
 E as Configurações guardam
 metas, limites e backups.
 
-24:49.489 --> 24:52.775
+24:28.239 --> 24:31.525
 Obrigado por assistir, e bom
 trabalho com o Controladoria.
