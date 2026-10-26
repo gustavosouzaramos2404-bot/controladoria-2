@@ -1,0 +1,82 @@
+{
+  "video": {
+    "largura": 1920,
+    "altura": 1080,
+    "fps": 30,
+    "crf": 20
+  },
+  "tema": "light",
+  "relogio": "2026-10-26T09:00:00-03:00",
+  "versaoSistema": "1.0.0",
+  "respiroS": 0.6,
+  "tts": {
+    "provedores": [
+      "elevenlabs",
+      "edge",
+      "sapi"
+    ],
+    "edge": {
+      "voz": "pt-BR-AntonioNeural",
+      "velocidade": "+10%"
+    },
+    "elevenlabs": {
+      "modelo": "eleven_multilingual_v2",
+      "estabilidade": 0.5,
+      "similaridade": 0.75
+    },
+    "sapi": {
+      "voz": "Microsoft Daniel"
+    },
+    "palavrasPorMinuto": 152
+  },
+  "audio": {
+    "lufs": -16,
+    "fadeMs": 30
+  },
+  "pronuncia": {
+    "EBITDA": "ebítida",
+    "PDD": "pê dê dê",
+    "PMR": "pê eme erre",
+    "B2G": "bi tu gí",
+    "NF-e": "nota fiscal eletrônica",
+    "CNPJ": "cê ene pê jota",
+    "BSC": "bê esse cê",
+    "CIF": "cife",
+    "MOD": "mão de obra direta",
+    "FEFO": "fêfo",
+    "EVA": "é vê á",
+    "ROI": "érre ó í",
+    "JSON": "djêison",
+    "CSV": "cê esse vê",
+    "SRP": "esse érre pê",
+    "IPCA": "ípeca",
+    "UF": "u éfe",
+    "p.p.": "pontos percentuais",
+    "a.a.": "ao ano",
+    "13 semanas": "treze semanas",
+    "Ata 012/2025": "Ata zero doze de dois mil e vinte e cinco",
+    "Ata 003/2025": "Ata zero zero três de dois mil e vinte e cinco",
+    "Contrato 019/2025": "Contrato zero dezenove de dois mil e vinte e cinco",
+    "Contrato 045/2025": "Contrato zero quarenta e cinco de dois mil e vinte e cinco",
+    "NOPAT": "nopáti",
+    "Lei 14.133/2021": "Lei quatorze mil cento e trinta e três, de dois mil e vinte e um"
+  },
+  "ffmpeg": {
+    "caminho": ""
+  },
+  "preview": [
+    "painel-resumo",
+    "painel-central",
+    "contrato-itens"
+  ],
+  "leadS": 0.5,
+  "alteracoesAutorizadas": [
+    "js/modules/videoaula.js",
+    "js/app.js",
+    "js/ui/dom.js",
+    "index.html",
+    "css/components.css",
+    "ferramentas/servidor.js",
+    "midia/"
+  ]
+}

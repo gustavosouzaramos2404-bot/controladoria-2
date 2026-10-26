@@ -86,7 +86,8 @@
     imprimir: '<path d="M7 8V3h10v5"/><path d="M5 8h14a2 2 0 0 1 2 2v6h-4v4H7v-4H3v-6a2 2 0 0 1 2-2z"/>',
     info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6v.3"/>',
     acao: '<path d="M5 12l4 4L19 6"/>',
-    voltar: '<path d="M15 6l-6 6 6 6"/>'
+    voltar: '<path d="M15 6l-6 6 6 6"/>',
+    videoaula: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9.2v5.6l4.6-2.8z"/>'
   };
 
   /** Ícone SVG. Com "rotulo", vira imagem acessível; sem ele, decorativo. */

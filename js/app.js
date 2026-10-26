@@ -28,6 +28,7 @@
     { id: 'controles', rotulo: 'Controles internos', icone: 'controles' },
     { id: 'planos', rotulo: 'Planos de ação', icone: 'planos' },
     { id: 'relatorios', rotulo: 'Relatórios', icone: 'relatorios' },
+    { id: 'videoaula', rotulo: 'Videoaula', icone: 'videoaula' },
     { id: 'configuracoes', rotulo: 'Configurações', icone: 'configuracoes' }
   ];
 

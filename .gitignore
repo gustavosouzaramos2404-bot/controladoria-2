@@ -28,3 +28,6 @@ backup*.json
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Vídeos da aba Videoaula (grandes; gerados em videoaula/, ver videoaula/README.md)
+midia/*.mp4

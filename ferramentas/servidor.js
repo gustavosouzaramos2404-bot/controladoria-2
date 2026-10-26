@@ -20,7 +20,9 @@ const TIPOS = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.ico': 'image/x-icon',
-  '.pdf': 'application/pdf'
+  '.pdf': 'application/pdf',
+  '.mp4': 'video/mp4',
+  '.vtt': 'text/vtt; charset=utf-8'
 };
 
 http.createServer((req, res) => {
@@ -38,13 +40,38 @@ http.createServer((req, res) => {
     res.writeHead(403).end('Acesso negado.');
     return;
   }
+  const tipo = TIPOS[path.extname(arquivo).toLowerCase()] || 'application/octet-stream';
+  // Vídeos vão em partes (Range), para o player conseguir avançar e voltar sem baixar tudo.
+  if (tipo.startsWith('video/')) {
+    fs.stat(arquivo, (erro, info) => {
+      if (erro || !info.isFile()) {
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('Arquivo não encontrado.');
+        return;
+      }
+      const faixa = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+      if (!faixa) {
+        res.writeHead(200, { 'Content-Type': tipo, 'Content-Length': info.size, 'Accept-Ranges': 'bytes' });
+        fs.createReadStream(arquivo).pipe(res);
+        return;
+      }
+      const inicio = faixa[1] ? Number(faixa[1]) : Math.max(0, info.size - Number(faixa[2]));
+      const fim = faixa[1] && faixa[2] ? Math.min(Number(faixa[2]), info.size - 1) : info.size - 1;
+      if (inicio > fim || inicio >= info.size) {
+        res.writeHead(416, { 'Content-Range': `bytes */${info.size}` }).end();
+        return;
+      }
+      res.writeHead(206, { 'Content-Type': tipo, 'Content-Length': fim - inicio + 1, 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${inicio}-${fim}/${info.size}` });
+      fs.createReadStream(arquivo, { start: inicio, end: fim }).pipe(res);
+    });
+    return;
+  }
   fs.readFile(arquivo, (erro, conteudo) => {
     if (erro) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('Arquivo não encontrado.');
       return;
     }
     res.writeHead(200, {
-      'Content-Type': TIPOS[path.extname(arquivo).toLowerCase()] || 'application/octet-stream',
+      'Content-Type': tipo,
       'Cache-Control': 'no-cache'
     });
     res.end(conteudo);

@@ -1,0 +1,14 @@
+{
+  "name": "controladoria-videoaula",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Produção automatizada da videoaula do sistema Controladoria",
+  "scripts": {
+    "build:video": "node src/build.js",
+    "preview": "node src/build.js --preview",
+    "validate": "node src/validate.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}
