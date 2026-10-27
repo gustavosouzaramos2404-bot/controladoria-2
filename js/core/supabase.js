@@ -168,6 +168,36 @@
     }
   }
 
+  /** Esqueci a senha: o Supabase envia um código de recuperação ao e-mail. */
+  async function recuperarSenha(email) {
+    try {
+      await requisitar('/auth/v1/recover', { metodo: 'POST', corpo: { email } });
+    } catch (e) {
+      throw erro(mensagemConta(e), { offline: e.offline });
+    }
+  }
+
+  /** Confere o código de recuperação; se estiver certo, entra (para trocar a senha). */
+  async function confirmarRecuperacao(email, codigo) {
+    try {
+      const dados = await requisitar('/auth/v1/verify', { metodo: 'POST', corpo: { type: 'recovery', email, token: codigo } });
+      return aceitarSessao(dados);
+    } catch (e) {
+      throw erro(mensagemConta(e), { offline: e.offline });
+    }
+  }
+
+  /** Troca a senha do usuário logado. */
+  async function trocarSenha(senha) {
+    try {
+      await autenticado('/auth/v1/user', { metodo: 'PUT', corpo: { password: senha } });
+    } catch (e) {
+      const m = String(e.message || '');
+      if (/different from the old|same.*password/i.test(m)) throw erro('A nova senha precisa ser diferente da anterior.');
+      throw erro(mensagemConta(e), { offline: e.offline });
+    }
+  }
+
   /** Renova o token de acesso. Se o banco recusar, a sessão é encerrada. */
   function renovar() {
     if (renovando) return renovando;
@@ -232,5 +262,8 @@
     }
   }
 
-  NS.core.supabase = { configurado, sessao, usuario, entrar, criarConta, confirmarCodigo, reenviarCodigo, sair, renovar, rpc, consultar };
+  NS.core.supabase = {
+    configurado, sessao, usuario, entrar, criarConta, confirmarCodigo, reenviarCodigo,
+    recuperarSenha, confirmarRecuperacao, trocarSenha, sair, renovar, rpc, consultar
+  };
 })(typeof window !== 'undefined' ? window : globalThis);

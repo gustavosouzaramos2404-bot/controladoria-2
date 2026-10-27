@@ -31,19 +31,6 @@
         { inicio: 1333.6, titulo: 'Configurações' },
         { inicio: 1416.7, titulo: 'Encerramento' }
       ]
-    },
-    {
-      id: 'previa',
-      titulo: 'Prévia: Painel e contratos públicos',
-      duracao: '2:16',
-      descricao: 'Resumo do mês, Central de desvios e a análise de reequilíbrio de uma ata, com narração.',
-      arquivo: 'midia/videoaula-preview.mp4',
-      legendas: 'midia/videoaula-preview.vtt',
-      capitulos: [
-        { inicio: 0, titulo: 'Painel: resumo do mês' },
-        { inicio: 40.2, titulo: 'Painel: Central de desvios' },
-        { inicio: 96.7, titulo: 'Contratos públicos: itens e reequilíbrio' }
-      ]
     }
   ];
 
@@ -51,16 +38,35 @@
 
   /** Renderiza a tela de videoaulas. */
   function tela(el, rota) {
-    const { html, icone } = NS.ui;
-    const C = NS.modules.comum;
     const video = VIDEOS.find((v) => v.id === rota.query.video) || VIDEOS[0];
 
+    // A tela é redesenhada quando os dados mudam (ex.: sincronização com o banco).
+    // Se o mesmo vídeo já está na tela, mantém o player para não interromper a aula.
+    let player = el.querySelector('[data-video]');
+    if (!player || player.dataset.video !== video.id) {
+      montar(el, video);
+      player = el.querySelector('[data-video]');
+      player.addEventListener('error', () => { el.querySelector('[data-erro-video]').hidden = false; }, true);
+    }
+    el.onclick = (ev) => {
+      const alvo = ev.target.closest('[data-acao="capitulo"]');
+      if (!alvo) return;
+      player.currentTime = Number(alvo.dataset.inicio) || 0;
+      player.play().catch(() => {});
+      player.focus();
+    };
+  }
+
+  /** Monta o HTML da tela para um vídeo. */
+  function montar(el, video) {
+    const { html, icone } = NS.ui;
+    const C = NS.modules.comum;
     el.innerHTML = String(html`
       ${C.cabecalho({ titulo: 'Videoaula', subtitulo: 'Aprenda a usar o Controladoria com vídeos narrados. Os dados mostrados nos vídeos são fictícios.' })}
       <section class="bloco">
         <div class="bloco-cabecalho"><h2>${video.titulo}</h2><p>${video.descricao} Duração: ${video.duracao}.</p></div>
         <div class="videoaula-player">
-          <video controls preload="metadata" playsinline data-video>
+          <video controls preload="metadata" playsinline data-video="${video.id}">
             <source src="${video.arquivo}" type="video/mp4">
             ${video.legendas ? html`<track kind="subtitles" src="${video.legendas}" srclang="pt-BR" label="Português" default>` : ''}
           </video>
@@ -81,16 +87,6 @@
             ${VIDEOS.map((v) => html`<li><a href="#/videoaula?video=${v.id}" ${v.id === video.id ? NS.ui.raw('aria-current="true"') : ''}>${icone('videoaula')}${v.titulo}</a> <span class="suave">${v.duracao}</span></li>`)}
           </ul>
         </section>` : ''}`);
-
-    const player = el.querySelector('[data-video]');
-    player.addEventListener('error', () => { el.querySelector('[data-erro-video]').hidden = false; }, true);
-    el.onclick = (ev) => {
-      const alvo = ev.target.closest('[data-acao="capitulo"]');
-      if (!alvo) return;
-      player.currentTime = Number(alvo.dataset.inicio) || 0;
-      player.play().catch(() => {});
-      player.focus();
-    };
   }
 
   NS.modules.videoaula = { rotas: { videoaula: tela } };

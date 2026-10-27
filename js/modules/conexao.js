@@ -55,7 +55,9 @@
     const alvo = document.querySelector('[data-sincronia]');
     if (alvo) alvo.innerHTML = String(indicador());
     const bloco = document.querySelector('[data-slot="banco"]');
-    if (bloco) bloco.innerHTML = String(painelHtml());
+    // Não apaga o que está sendo digitado (ex.: e-mail a liberar) a cada rodada de sincronização.
+    const digitando = bloco && bloco.contains(document.activeElement) && /^(INPUT|SELECT)$/.test(document.activeElement.tagName);
+    if (bloco && !digitando) bloco.innerHTML = String(painelHtml());
   }
 
   /* ------------------------------ Login ------------------------------ */
@@ -132,7 +134,9 @@
       document.title = `${titulo} · Controladoria`;
       etapa.innerHTML = String(conteudo);
       etapa.querySelectorAll('[data-ir]').forEach((b) => b.addEventListener('click', () => {
+        const email = (etapa.querySelector('input[type="email"]') || {}).value;
         if (b.dataset.ir === 'criar') mostrarCriar();
+        else if (b.dataset.ir === 'esqueci') mostrarEsqueci(email);
         else mostrarEntrar();
       }));
       const primeiro = etapa.querySelector('input');
@@ -144,7 +148,7 @@
         <p class="subtitulo">Entre com seu usuário para acessar os dados da empresa.</p>
         <form class="formulario" novalidate data-login>${camposLoginHtml(false)}</form>
         <p class="nota">Ainda não tem conta? <button type="button" class="botao-link" data-ir="criar">Criar uma conta</button></p>
-        <p class="nota">Esqueceu a senha? Fale com o administrador do sistema.</p>`);
+        <p class="nota">Esqueceu a senha? <button type="button" class="botao-link" data-ir="esqueci">Recuperar pelo e-mail</button></p>`);
       const form = etapa.querySelector('[data-login]');
       if (email) { form.email.value = email; form.senha.focus(); }
       ligarLogin(form, aoEntrar, (e) => mostrarCodigo(e, 'Sua conta ainda não foi confirmada. Digite o código enviado ao seu e-mail ou peça um novo.'));
@@ -242,6 +246,85 @@
           situacao.textContent = e.message;
         }
         reenviar.disabled = false;
+      });
+    }
+
+    /** Esqueci a senha: pede o e-mail e envia o código de recuperação. */
+    function mostrarEsqueci(email) {
+      mostrar('Recuperar senha', html`
+        <p class="subtitulo">Digite o e-mail da sua conta. Enviaremos um código para você criar uma nova senha.</p>
+        <form class="formulario" novalidate data-esqueci>
+          <div class="campo"><label for="esqueci-email">E-mail</label>
+            <input type="email" id="esqueci-email" name="email" autocomplete="username" required></div>
+          <p class="caixa-alerta" data-login-erro role="alert" hidden></p>
+          <div class="formulario-acoes">
+            <button type="button" class="botao botao-secundario" data-ir="entrar">Voltar</button>
+            <button type="submit" class="botao botao-primario">Enviar código</button>
+          </div>
+        </form>`);
+      const form = etapa.querySelector('[data-esqueci]');
+      if (email) form.email.value = email;
+      const caixaErro = form.querySelector('[data-login-erro]');
+      const mostrarErro = (msg) => { caixaErro.textContent = msg; caixaErro.hidden = false; };
+      form.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const e = form.email.value.trim();
+        if (!e || !form.email.checkValidity()) { mostrarErro('Digite um e-mail válido.'); return; }
+        const botao = form.querySelector('[type="submit"]');
+        botao.disabled = true;
+        botao.textContent = 'Enviando…';
+        try {
+          await cliente().recuperarSenha(e);
+          mostrarNovaSenha(e);
+        } catch (erro) {
+          mostrarErro(erro.message);
+          botao.disabled = false;
+          botao.textContent = 'Enviar código';
+        }
+      });
+    }
+
+    /** Código de recuperação + nova senha. */
+    function mostrarNovaSenha(email) {
+      mostrar('Nova senha', html`
+        <p class="subtitulo">Se existir uma conta com <strong>${email}</strong>, enviamos um código para esse e-mail. Digite o código e a nova senha.</p>
+        <form class="formulario" novalidate data-nova-senha>
+          <div class="campo"><label for="rec-codigo">Código</label>
+            <input type="text" id="rec-codigo" name="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required></div>
+          <div class="campo"><label for="rec-senha">Nova senha</label>
+            <input type="password" id="rec-senha" name="senha" autocomplete="new-password" minlength="6" required>
+            <p class="ajuda">Pelo menos 6 caracteres.</p></div>
+          <div class="campo"><label for="rec-senha2">Repita a nova senha</label>
+            <input type="password" id="rec-senha2" name="senha2" autocomplete="new-password" required></div>
+          <p class="caixa-alerta" data-login-erro role="alert" hidden></p>
+          <div class="formulario-acoes">
+            <button type="button" class="botao botao-secundario" data-ir="entrar">Voltar</button>
+            <button type="submit" class="botao botao-primario">Salvar nova senha</button>
+          </div>
+        </form>
+        <p class="nota">Não recebeu? Confira a caixa de spam ou <button type="button" class="botao-link" data-ir="esqueci">peça outro código</button>.</p>`);
+      const form = etapa.querySelector('[data-nova-senha]');
+      const caixaErro = form.querySelector('[data-login-erro]');
+      const mostrarErro = (msg) => { caixaErro.textContent = msg; caixaErro.hidden = false; };
+      form.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const codigo = form.codigo.value.replace(/\s+/g, '');
+        const senha = form.senha.value;
+        if (!/^\d{6,10}$/.test(codigo)) { mostrarErro('Digite o código numérico recebido no e-mail.'); return; }
+        if (senha.length < 6) { mostrarErro('A senha precisa ter pelo menos 6 caracteres.'); return; }
+        if (senha !== form.senha2.value) { mostrarErro('As senhas não conferem.'); return; }
+        const botao = form.querySelector('[type="submit"]');
+        botao.disabled = true;
+        botao.textContent = 'Salvando…';
+        try {
+          await cliente().confirmarRecuperacao(email, codigo);
+          await cliente().trocarSenha(senha);
+          await concluir();
+        } catch (e) {
+          mostrarErro(e.message);
+          botao.disabled = false;
+          botao.textContent = 'Salvar nova senha';
+        }
       });
     }
 
@@ -396,7 +479,95 @@
         <button type="button" class="botao botao-secundario" data-sinc-acao="enviar-tudo">${icone('upload')}Enviar dados deste navegador para o banco</button>
         <button type="button" class="botao botao-texto" data-sinc-acao="sair">Sair</button>
       </div>
-      <p class="nota">"Enviar dados deste navegador" grava no banco tudo o que está aqui (útil na migração inicial ou para recuperar algo que ficou só neste computador). Em cada registro vale a versão editada por último.</p>`;
+      <p class="nota">"Enviar dados deste navegador" grava no banco tudo o que está aqui (útil na migração inicial ou para recuperar algo que ficou só neste computador). Em cada registro vale a versão editada por último.</p>
+      ${papel === 'admin' ? equipeHtml() : ''}`;
+  }
+
+  /* ------------------------------ Equipe (só administrador) ------------------------------ */
+
+  // Lista carregada do banco: null (ainda não carregou), array, ou { erro }.
+  let equipe = null;
+  let carregandoEquipe = false;
+
+  async function carregarEquipe() {
+    if (carregandoEquipe) return;
+    carregandoEquipe = true;
+    try {
+      equipe = await cliente().rpc('listar_equipe');
+    } catch (e) {
+      const semFuncao = e.status === 404 || e.codigo === 'PGRST202';
+      equipe = { erro: semFuncao
+        ? 'A gestão da equipe ainda não foi instalada no banco. Aplique a migração supabase/migrations/20261027120000_equipe.sql no Supabase.'
+        : e.message };
+    }
+    carregandoEquipe = false;
+    atualizar();
+  }
+
+  function equipeHtml() {
+    const { html } = NS.ui;
+    if (equipe === null) {
+      setTimeout(carregarEquipe, 0);
+      return html`<h3>Equipe</h3><p class="nota">Carregando a equipe…</p>`;
+    }
+    const eu = (cliente().usuario() || {}).id;
+    const situacao = (m) => {
+      if (m.papel === 'admin') return 'Administrador';
+      if (m.papel === 'membro') return 'Membro';
+      return m.confirmado ? 'Aguardando liberação' : 'E-mail ainda não confirmado';
+    };
+    return html`
+      <h3>Equipe</h3>
+      <p class="nota">Cada pessoa entra com o próprio e-mail e senha. Quem cria a conta na tela de login só acessa os dados depois de liberado aqui.</p>
+      ${equipe.erro ? html`<p class="caixa-alerta">${equipe.erro}</p>` : html`
+        <div class="tabela-rolagem"><table class="tabela">
+          <thead><tr><th scope="col">E-mail</th><th scope="col">Nome</th><th scope="col">Situação</th><th scope="col"><span class="visualmente-oculto">Ações</span></th></tr></thead>
+          <tbody>${equipe.map((m) => html`<tr>
+            <td>${m.email}</td><td>${m.nome || ''}</td><td>${situacao(m)}</td>
+            <td>${m.user_id === eu ? html`<span class="suave">Você</span>` : m.papel
+              ? html`<button type="button" class="botao botao-texto botao-pequeno" data-equipe-remover="${m.user_id}" data-email="${m.email}">Remover acesso</button>`
+              : html`<button type="button" class="botao botao-secundario botao-pequeno" data-equipe-liberar="${m.email}">Liberar acesso</button>`}</td>
+          </tr>`)}</tbody>
+        </table></div>`}
+      <form class="formulario" novalidate data-equipe-form>
+        <div class="campo"><label for="equipe-email">Liberar pelo e-mail</label>
+          <input type="email" id="equipe-email" name="email" autocomplete="off" required>
+          <p class="ajuda">A pessoa precisa ter criado a conta na tela de login.</p></div>
+        <div class="campo"><label for="equipe-papel">Papel</label>
+          <select id="equipe-papel" name="papel"><option value="membro">Membro</option><option value="admin">Administrador</option></select></div>
+        <div class="formulario-acoes">
+          <button type="button" class="botao botao-texto" data-equipe-atualizar>Atualizar lista</button>
+          <button type="submit" class="botao botao-primario">Liberar acesso</button>
+        </div>
+      </form>`;
+  }
+
+  async function liberar(email, papel = 'membro') {
+    try {
+      await cliente().rpc('liberar_membro', { p_email: email, p_papel: papel });
+      NS.ui.avisar(`${email} liberado como ${papel === 'admin' ? 'administrador' : 'membro'}.`);
+      equipe = null;
+      atualizar();
+    } catch (e) {
+      NS.ui.avisar(e.message, 'erro');
+    }
+  }
+
+  async function remover(id, email) {
+    const ok = await NS.ui.modal.confirmar({
+      titulo: 'Remover acesso',
+      mensagem: `${email} deixará de acessar os dados da empresa. A conta continua existindo e pode ser liberada de novo.`,
+      rotuloConfirmar: 'Remover acesso', perigo: true
+    });
+    if (!ok) return;
+    try {
+      await cliente().rpc('remover_membro', { p_user_id: id });
+      NS.ui.avisar(`Acesso de ${email} removido.`);
+      equipe = null;
+      atualizar();
+    } catch (e) {
+      NS.ui.avisar(e.message, 'erro');
+    }
   }
 
   /* ------------------------------ Ações (cliques em qualquer tela) ------------------------------ */
@@ -423,6 +594,19 @@
     document.addEventListener('click', (ev) => {
       const b = ev.target.closest('[data-sinc-acao]');
       if (b) executar(b.dataset.sincAcao);
+      const lib = ev.target.closest('[data-equipe-liberar]');
+      if (lib) liberar(lib.dataset.equipeLiberar);
+      const rem = ev.target.closest('[data-equipe-remover]');
+      if (rem) remover(rem.dataset.equipeRemover, rem.dataset.email);
+      if (ev.target.closest('[data-equipe-atualizar]')) { equipe = null; atualizar(); }
+    });
+    document.addEventListener('submit', (ev) => {
+      const form = ev.target.closest('[data-equipe-form]');
+      if (!form) return;
+      ev.preventDefault();
+      const email = form.email.value.trim();
+      if (!email || !form.email.checkValidity()) { NS.ui.avisar('Digite um e-mail válido.', 'erro'); return; }
+      liberar(email, form.papel.value);
     });
     let anterior = null;
     NS.core.eventos.on('sincronia:status', (st) => {

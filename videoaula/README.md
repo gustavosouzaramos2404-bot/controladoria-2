@@ -70,11 +70,13 @@ lista textos que precisam aparecer na tela durante a cena.
 
 ## Publicar na aba Videoaula do sistema
 
-A aba **Videoaula** (`js/modules/videoaula.js`) lê os vídeos de `../midia/`. Os `.mp4` ficam fora do
-git (`.gitignore`); só as legendas `.vtt` são versionadas. Depois de gerar o vídeo:
+A aba **Videoaula** (`js/modules/videoaula.js`) lê um único vídeo, `../midia/videoaula-completa.mp4`,
+com as legendas `.vtt` ao lado. Depois de gerar o vídeo, recodifique tudo de uma vez (um fluxo contínuo,
+quadro-chave a cada 2 s e sem trilhas de dados extras, para o navegador tocar do início ao fim e avançar
+sem travar):
 
 ```bash
-ffmpeg -i out/videoaula.mp4 -c:v libx264 -preset medium -crf 23 -tune stillimage -pix_fmt yuv420p -c:a copy -map_chapters 0 -movflags +faststart ../midia/videoaula-completa.mp4
+ffmpeg -i out/videoaula.mp4 -map 0:v:0 -map 0:a:0 -dn -map_metadata 0 -map_chapters 0 -c:v libx264 -preset medium -crf 23 -tune stillimage -profile:v high -level 4.0 -g 60 -keyint_min 60 -sc_threshold 0 -pix_fmt yuv420p -c:a aac -b:a 160k -ar 48000 -movflags +faststart ../midia/videoaula-completa.mp4
 ffmpeg -i out/videoaula.srt ../midia/videoaula-completa.vtt
 ```
 

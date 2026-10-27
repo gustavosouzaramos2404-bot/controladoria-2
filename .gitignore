@@ -29,5 +29,7 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
-# Vídeos da aba Videoaula (grandes; gerados em videoaula/, ver videoaula/README.md)
+# Vídeos da aba Videoaula (grandes; gerados em videoaula/, ver videoaula/README.md).
+# Só a videoaula completa, já em um arquivo único, vai para o repositório.
 midia/*.mp4
+!midia/videoaula-completa.mp4

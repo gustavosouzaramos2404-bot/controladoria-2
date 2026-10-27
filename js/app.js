@@ -48,12 +48,15 @@
   function montarNavegacao() {
     const nav = document.getElementById('navegacao');
     const empresa = store.empresa();
+    // Com login, cada pessoa aparece pelo próprio e-mail; sem banco, vale o nome de Configurações.
+    const logado = NS.core.supabase.usuario();
+    const usuario = logado ? logado.email : (store.config().usuario || 'preencha em Configurações');
     nav.innerHTML = String(html`
       <div class="navegacao-marca"><strong>Controladoria</strong><span>${empresa.nome || 'Empresa: preencha o cadastro'}</span></div>
       <ul class="navegacao-lista">
         ${SECOES.map((s) => html`<li><a class="navegacao-link" href="#/${s.id}" data-secao="${s.id}">${icone(s.icone)}<span>${s.rotulo}</span></a></li>`)}
       </ul>
-      <div class="navegacao-rodape">Usuário: ${store.config().usuario || 'preencha em Configurações'}<br>Versão ${NS.versao}<div data-sincronia>${NS.modules.conexao.indicador()}</div></div>`);
+      <div class="navegacao-rodape">Usuário: ${usuario}<br>Versão ${NS.versao}<div data-sincronia>${NS.modules.conexao.indicador()}</div></div>`);
   }
 
   /** Marca a seção atual e mostra o número de desvios críticos no Painel. */

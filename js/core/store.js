@@ -349,6 +349,7 @@
      */
     aplicarDoServidor(remoto, { completo = false, preservar = new Set() } = {}) {
       const manter = (col, id) => preservar.has(`${col}|${id || ''}`);
+      const antes = JSON.stringify(estado);
       for (const col of NS.core.schema.COLECOES) {
         const lista = remoto[col];
         if (!Array.isArray(lista)) continue;
@@ -376,6 +377,9 @@
       }
       if (estado.log.length > LIMITE_LOG) estado.log.splice(0, estado.log.length - LIMITE_LOG);
       estado = normalizar(estado);
+      // Rodada sem novidades: não salva nem avisa as telas (redesenhar a tela
+      // a cada minuto interrompia, por exemplo, a videoaula em andamento).
+      if (JSON.stringify(estado) === antes) return;
       salvar();
     },
 

@@ -11,8 +11,10 @@
   NS.core = NS.core || {};
 
   NS.core.log = {
-    /** Nome de quem está usando o sistema (preenchido em Configurações). */
+    /** Quem está usando o sistema: o e-mail do login ou o nome preenchido em Configurações. */
     autor() {
+      const logado = NS.core.supabase && NS.core.supabase.usuario();
+      if (logado && logado.email) return logado.email;
       const nome = (NS.core.store.config().usuario || '').trim();
       return nome || 'Usuário não identificado';
     },

@@ -83,6 +83,7 @@ As migrations criam:
 | `…_estrutura.sql` | 31 tabelas (cadastros, contratos B2G, empenhos, lotes, estoque, lançamentos, orçamento, demonstrações, indicadores, governança), plano de contas, chaves estrangeiras, índices |
 | `…_seguranca_rls.sql` | tabela `membros` e RLS em todas as tabelas (só membros acessam; log só aceita inclusão) |
 | `…_sincronizacao.sql` | funções `salvar_registro`, `remover_registro`, `exportar_dados` e `importar_dados` usadas pelo app |
+| `…_equipe.sql` | funções `listar_equipe`, `liberar_membro` e `remover_membro` (bloco *Equipe* em Configurações, só administrador) |
 
 ### 2. Apontar o app para o projeto
 
@@ -103,13 +104,19 @@ Para usar o app sem banco, deixe `url` em branco.
      *Confirm email* **ligado**;
    - Authentication → Emails → *Confirm signup*: troque o link pelo código, por exemplo
      `<p>Seu código de confirmação: <strong>{{ .Token }}</strong></p>`;
+   - Authentication → Emails → *Reset Password*: inclua o código também, por exemplo
+     `<p>Código para criar uma nova senha: <strong>{{ .Token }}</strong></p>` (usado em
+     *Esqueceu a senha? Recuperar pelo e-mail* na tela de login);
    - o envio de e-mails padrão do Supabase tem limite baixo (poucos por hora). Para uso real,
      configure um SMTP próprio em Authentication → Emails → SMTP Settings.
 
    Se preferir que só o administrador crie usuários, desligue *Allow new users to sign up* e crie
    em Authentication → Users → *Add user*, com *Auto Confirm User* marcado.
-2. **Libere cada usuário na equipe** pelo SQL Editor (o primeiro como `admin`). Criar a conta não
-   dá acesso aos dados: até ser incluída aqui, a pessoa vê o aviso de que aguarda liberação.
+2. **Libere cada usuário na equipe.** O administrador faz isso em Configurações → Banco de dados →
+   *Equipe*: a lista mostra as contas criadas e quem aguarda liberação; basta *Liberar acesso* (ou
+   digitar o e-mail). Cada pessoa entra com o próprio e-mail e aparece por ele na navegação e no log.
+   O primeiro administrador é liberado pelo SQL Editor. Criar a conta não dá acesso aos dados: até
+   ser liberada, a pessoa vê o aviso de que aguarda liberação.
    ```sql
    insert into public.membros (user_id, nome, papel)
    select id, 'Nome da pessoa', 'admin'   -- ou 'membro'
