@@ -116,7 +116,7 @@
    * Tela de login mostrada antes de qualquer dado (app.js chama quando o
    * banco está configurado e não há sessão neste navegador).
    */
-  function telaLogin(el, { aoEntrar }) {
+  function telaLogin(el, { aoEntrar, retorno = null }) {
     const { html } = NS.ui;
     const semConexao = raiz.navigator && raiz.navigator.onLine === false;
     el.innerHTML = String(html`
@@ -202,7 +202,7 @@
 
     function mostrarCodigo(email, aviso) {
       mostrar('Confirmar e-mail', html`
-        <p class="subtitulo">Enviamos um código de confirmação para <strong>${email}</strong>. Digite-o abaixo para ativar sua conta.</p>
+        <p class="subtitulo">Enviamos um e-mail de confirmação para <strong>${email}</strong>. Abra o e-mail neste computador e clique no link <strong>Confirm your mail</strong>: o Controladoria abre aqui e ativa sua conta. Se o e-mail trouxer um código, você também pode digitá-lo abaixo.</p>
         ${aviso ? html`<p class="caixa-info">${aviso}</p>` : ''}
         <form class="formulario" novalidate data-codigo>
           <div class="campo"><label for="codigo">Código</label>
@@ -252,14 +252,14 @@
     /** Esqueci a senha: pede o e-mail e envia o código de recuperação. */
     function mostrarEsqueci(email) {
       mostrar('Recuperar senha', html`
-        <p class="subtitulo">Digite o e-mail da sua conta. Enviaremos um código para você criar uma nova senha.</p>
+        <p class="subtitulo">Digite o e-mail da sua conta. Enviaremos um link para você criar uma nova senha.</p>
         <form class="formulario" novalidate data-esqueci>
           <div class="campo"><label for="esqueci-email">E-mail</label>
             <input type="email" id="esqueci-email" name="email" autocomplete="username" required></div>
           <p class="caixa-alerta" data-login-erro role="alert" hidden></p>
           <div class="formulario-acoes">
             <button type="button" class="botao botao-secundario" data-ir="entrar">Voltar</button>
-            <button type="submit" class="botao botao-primario">Enviar código</button>
+            <button type="submit" class="botao botao-primario">Enviar link</button>
           </div>
         </form>`);
       const form = etapa.querySelector('[data-esqueci]');
@@ -275,22 +275,33 @@
         botao.textContent = 'Enviando…';
         try {
           await cliente().recuperarSenha(e);
-          mostrarNovaSenha(e);
+          mostrarLinkEnviado(e);
         } catch (erro) {
           mostrarErro(erro.message);
           botao.disabled = false;
-          botao.textContent = 'Enviar código';
+          botao.textContent = 'Enviar link';
         }
       });
     }
 
-    /** Código de recuperação + nova senha. */
-    function mostrarNovaSenha(email) {
+    /** E-mail de recuperação enviado: a pessoa abre o link, que volta para este app. */
+    function mostrarLinkEnviado(email) {
+      mostrar('Confira seu e-mail', html`
+        <p class="caixa-info">Se existir uma conta com <strong>${email}</strong>, enviamos um e-mail com o link <strong>Reset Password</strong>.</p>
+        <p class="subtitulo">Abra o e-mail neste computador e clique no link: o Controladoria abre aqui e pede a nova senha. O link vale por 1 hora e só funciona uma vez.</p>
+        <div class="formulario-acoes">
+          <button type="button" class="botao botao-secundario" data-ir="esqueci">Enviar de novo</button>
+          <button type="button" class="botao botao-primario" data-ir="entrar">Voltar ao login</button>
+        </div>
+        <p class="nota">Não chegou? Confira a caixa de spam. O envio padrão do Supabase permite poucos e-mails por hora.</p>`);
+    }
+
+    /** Voltou pelo link de recuperação (já com sessão): escolhe a nova senha. */
+    function mostrarNovaSenha() {
+      const u = cliente().usuario();
       mostrar('Nova senha', html`
-        <p class="subtitulo">Se existir uma conta com <strong>${email}</strong>, enviamos um código para esse e-mail. Digite o código e a nova senha.</p>
+        <p class="subtitulo">Crie uma nova senha${u ? html` para <strong>${u.email}</strong>` : ''}.</p>
         <form class="formulario" novalidate data-nova-senha>
-          <div class="campo"><label for="rec-codigo">Código</label>
-            <input type="text" id="rec-codigo" name="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required></div>
           <div class="campo"><label for="rec-senha">Nova senha</label>
             <input type="password" id="rec-senha" name="senha" autocomplete="new-password" minlength="6" required>
             <p class="ajuda">Pelo menos 6 caracteres.</p></div>
@@ -298,26 +309,21 @@
             <input type="password" id="rec-senha2" name="senha2" autocomplete="new-password" required></div>
           <p class="caixa-alerta" data-login-erro role="alert" hidden></p>
           <div class="formulario-acoes">
-            <button type="button" class="botao botao-secundario" data-ir="entrar">Voltar</button>
             <button type="submit" class="botao botao-primario">Salvar nova senha</button>
           </div>
-        </form>
-        <p class="nota">Não recebeu? Confira a caixa de spam ou <button type="button" class="botao-link" data-ir="esqueci">peça outro código</button>.</p>`);
+        </form>`);
       const form = etapa.querySelector('[data-nova-senha]');
       const caixaErro = form.querySelector('[data-login-erro]');
       const mostrarErro = (msg) => { caixaErro.textContent = msg; caixaErro.hidden = false; };
       form.addEventListener('submit', async (ev) => {
         ev.preventDefault();
-        const codigo = form.codigo.value.replace(/\s+/g, '');
         const senha = form.senha.value;
-        if (!/^\d{6,10}$/.test(codigo)) { mostrarErro('Digite o código numérico recebido no e-mail.'); return; }
         if (senha.length < 6) { mostrarErro('A senha precisa ter pelo menos 6 caracteres.'); return; }
         if (senha !== form.senha2.value) { mostrarErro('As senhas não conferem.'); return; }
         const botao = form.querySelector('[type="submit"]');
         botao.disabled = true;
         botao.textContent = 'Salvando…';
         try {
-          await cliente().confirmarRecuperacao(email, codigo);
           await cliente().trocarSenha(senha);
           await concluir();
         } catch (e) {
@@ -348,7 +354,15 @@
       aoEntrar(cliente().sessao());
     }
 
-    mostrarEntrar();
+    // Voltou por um link de e-mail (app.js já tratou o endereço).
+    if (retorno && retorno.erro) {
+      mostrarEntrar();
+      const caixa = etapa.querySelector('[data-login-erro]');
+      caixa.textContent = retorno.erro;
+      caixa.hidden = false;
+    } else if (retorno && retorno.tipo === 'recovery') mostrarNovaSenha();
+    else if (retorno) concluir();
+    else mostrarEntrar();
   }
 
   /** Janela de login (para entrar sem sair da tela atual). */

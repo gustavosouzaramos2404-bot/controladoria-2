@@ -136,7 +136,7 @@
   async function criarConta(email, senha, nome) {
     let dados;
     try {
-      dados = await requisitar('/auth/v1/signup', { metodo: 'POST', corpo: { email, password: senha, data: { nome } } });
+      dados = await requisitar(`/auth/v1/signup?redirect_to=${encodeURIComponent(enderecoDoApp())}`, { metodo: 'POST', corpo: { email, password: senha, data: { nome } } });
     } catch (e) {
       throw erro(mensagemConta(e), { offline: e.offline });
     }
@@ -162,29 +162,50 @@
   /** Envia de novo o código de confirmação. */
   async function reenviarCodigo(email) {
     try {
-      await requisitar('/auth/v1/resend', { metodo: 'POST', corpo: { type: 'signup', email } });
+      await requisitar(`/auth/v1/resend?redirect_to=${encodeURIComponent(enderecoDoApp())}`, { metodo: 'POST', corpo: { type: 'signup', email } });
     } catch (e) {
       throw erro(mensagemConta(e), { offline: e.offline });
     }
   }
 
-  /** Esqueci a senha: o Supabase envia um código de recuperação ao e-mail. */
+  /** Endereço deste app, para onde os links dos e-mails do Supabase voltam. */
+  const enderecoDoApp = () => raiz.location.origin + raiz.location.pathname;
+
+  /** Esqueci a senha: o Supabase envia ao e-mail um link que volta para este app. */
   async function recuperarSenha(email) {
     try {
-      await requisitar('/auth/v1/recover', { metodo: 'POST', corpo: { email } });
+      await requisitar(`/auth/v1/recover?redirect_to=${encodeURIComponent(enderecoDoApp())}`, { metodo: 'POST', corpo: { email } });
     } catch (e) {
       throw erro(mensagemConta(e), { offline: e.offline });
     }
   }
 
-  /** Confere o código de recuperação; se estiver certo, entra (para trocar a senha). */
-  async function confirmarRecuperacao(email, codigo) {
-    try {
-      const dados = await requisitar('/auth/v1/verify', { metodo: 'POST', corpo: { type: 'recovery', email, token: codigo } });
-      return aceitarSessao(dados);
-    } catch (e) {
-      throw erro(mensagemConta(e), { offline: e.offline });
+  /**
+   * Volta de um link de e-mail (confirmação de conta ou recuperação de senha):
+   * o Supabase devolve a sessão no endereço (#access_token=…&type=…).
+   * Devolve null se o endereço não é um retorno do e-mail; senão { tipo } e
+   * já deixa a sessão gravada. Link vencido ou já usado vira erro legível.
+   */
+  async function retornoDoEmail(hash) {
+    const p = new URLSearchParams(String(hash || '').replace(/^#/, ''));
+    if (p.get('error_code') || p.get('error')) {
+      const vencido = /expired|invalid/i.test(`${p.get('error_code')} ${p.get('error_description')}`);
+      throw erro(vencido
+        ? 'O link do e-mail venceu ou já foi usado. Peça um novo e abra o link mais recente.'
+        : (p.get('error_description') || 'Não foi possível usar o link do e-mail.').replace(/\+/g, ' '));
     }
+    if (!p.get('access_token')) return null;
+    const dados = {
+      access_token: p.get('access_token'), refresh_token: p.get('refresh_token'),
+      expires_at: Number(p.get('expires_at')) || undefined, expires_in: Number(p.get('expires_in')) || undefined
+    };
+    try {
+      dados.user = await requisitar('/auth/v1/user', { cabecalhos: { Authorization: `Bearer ${dados.access_token}` } });
+    } catch (e) {
+      throw erro(e.offline ? 'Sem conexão. Verifique a internet e abra o link de novo.' : 'O link do e-mail venceu ou já foi usado. Peça um novo.', { offline: e.offline });
+    }
+    aceitarSessao(dados);
+    return { tipo: p.get('type') || 'signup' };
   }
 
   /** Troca a senha do usuário logado. */
@@ -264,6 +285,6 @@
 
   NS.core.supabase = {
     configurado, sessao, usuario, entrar, criarConta, confirmarCodigo, reenviarCodigo,
-    recuperarSenha, confirmarRecuperacao, trocarSenha, sair, renovar, rpc, consultar
+    recuperarSenha, retornoDoEmail, trocarSenha, sair, renovar, rpc, consultar
   };
 })(typeof window !== 'undefined' ? window : globalThis);

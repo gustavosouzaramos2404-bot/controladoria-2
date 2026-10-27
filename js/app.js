@@ -187,6 +187,17 @@
     // Com o banco configurado, nada é mostrado antes do login. Quem já entrou
     // neste navegador continua com acesso offline (a sessão fica salva).
     const banco = NS.core.supabase;
+    // Volta de um link de e-mail do Supabase (#access_token=… ou #error=…): a
+    // tela de login conclui a confirmação da conta ou pede a nova senha.
+    if (banco.configurado() && /^#(access_token|error)=/.test(location.hash)) {
+      const hash = location.hash;
+      history.replaceState(null, '', location.pathname + location.search); // tira os tokens do endereço
+      document.body.classList.add('modo-login');
+      const tela = document.getElementById('tela');
+      const abrir = (retorno) => NS.modules.conexao.telaLogin(tela, { aoEntrar: () => location.reload(), retorno });
+      banco.retornoDoEmail(hash).then((r) => abrir(r), (e) => abrir({ erro: e.message }));
+      return;
+    }
     if (banco.configurado() && !banco.sessao()) {
       document.body.classList.add('modo-login');
       NS.modules.conexao.telaLogin(document.getElementById('tela'), { aoEntrar: () => location.reload() });
